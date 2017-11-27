@@ -453,7 +453,7 @@ public interface Appendix {
                 }
             }
         }
-
+        //逐步
         @Override
         boolean isPhasable() {
             return false;
@@ -873,7 +873,6 @@ public interface Appendix {
         private byte[] getPlaintext() {
             return isCompressed() && messageToEncrypt.length > 0 ? Convert.compress(messageToEncrypt) : messageToEncrypt;
         }
-
     }
 
     class EncryptedMessage extends AbstractEncryptedMessage {
@@ -995,7 +994,6 @@ public interface Appendix {
         int getEncryptedDataLength() {
             return EncryptedData.getEncryptedDataLength(getPlaintext());
         }
-
     }
 
     class EncryptToSelfMessage extends AbstractEncryptedMessage {

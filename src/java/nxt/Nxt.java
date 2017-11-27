@@ -66,7 +66,9 @@ public final class Nxt {
     private static final DirProvider dirProvider;
 
     private static final Properties defaultProperties = new Properties();
+
     static {
+        System.setProperty("nxt.runtime.mode","desktop");
         redirectSystemStreams("out");
         redirectSystemStreams("err");
         System.out.println("Initializing Nxt server version " + Nxt.VERSION);
@@ -325,11 +327,11 @@ public final class Nxt {
     static void setTime(Time time) {
         Nxt.time = time;
     }
-
+    //Kiwi：入口
     public static void main(String[] args) {
         try {
-            Runtime.getRuntime().addShutdownHook(new Thread(Nxt::shutdown));
-            init();
+            Runtime.getRuntime().addShutdownHook(new Thread(Nxt::shutdown));//JAVA虚拟机关闭钩子(Shutdown Hook)
+            init();//初始化
         } catch (Throwable t) {
             System.out.println("Fatal error: " + t.toString());
             t.printStackTrace();
@@ -363,17 +365,17 @@ public final class Nxt {
     private static class Init {
 
         private static volatile boolean initialized = false;
-
+        //随着类的加载而加载，只执行一次,并优先于主函数。
         static {
             try {
                 long startTime = System.currentTimeMillis();
-                Logger.init();
-                setSystemProperties();
-                logSystemProperties();
-                runtimeMode.init();
-                Thread secureRandomInitThread = initSecureRandom();
-                setServerStatus(ServerStatus.BEFORE_DATABASE, null);
-                Db.init();
+                Logger.init();//日志模块
+                setSystemProperties();// Override system settings that the user has define in nxt.properties file.
+                logSystemProperties();//打印系统属性
+                runtimeMode.init();//Kiwi:可能是运行状态
+                Thread secureRandomInitThread = initSecureRandom();//返回随机码的一个线程。猜测：这个随机码可能用在**的产生上
+                setServerStatus(ServerStatus.BEFORE_DATABASE, null);//运行状态
+                Db.init();//Kiwi：数据库初始化，里面有许多DDL语句，可以查看DB的表结构
                 setServerStatus(ServerStatus.AFTER_DATABASE, null);
                 TransactionProcessorImpl.getInstance();
                 BlockchainProcessorImpl.getInstance();
@@ -403,7 +405,7 @@ public final class Nxt {
                 ExchangeRequest.init();
                 Shuffling.init();
                 ShufflingParticipant.init();
-                PrunableMessage.init();
+                PrunableMessage.init();//删除修剪
                 TaggedData.init();
                 FxtDistribution.init();
                 Peers.init();

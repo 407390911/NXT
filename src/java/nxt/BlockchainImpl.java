@@ -243,6 +243,7 @@ final class BlockchainImpl implements Blockchain {
                 return result;
             }
         }
+
         // Search the database
         try (Connection con = Db.db.getConnection();
                 PreparedStatement pstmt = con.prepareStatement("SELECT * FROM block "
@@ -302,6 +303,7 @@ final class BlockchainImpl implements Blockchain {
         } catch (SQLException e) {
             throw new RuntimeException(e.toString(), e);
         }
+
         return result;
     }
 

@@ -74,7 +74,7 @@ public interface BlockchainProcessor extends Observable<Block,BlockchainProcesso
             super(message);
             this.block = block;
         }
-
+        //区块未认可异常
         BlockNotAcceptedException(Throwable cause, BlockImpl block) {
             super(cause);
             this.block = block;
@@ -84,13 +84,12 @@ public interface BlockchainProcessor extends Observable<Block,BlockchainProcesso
         public String getMessage() {
             return block == null ? super.getMessage() : super.getMessage() + ", block " + block.getStringId() + " " + block.getJSONObject().toJSONString();
         }
-
     }
 
     class TransactionNotAcceptedException extends BlockNotAcceptedException {
 
         private final TransactionImpl transaction;
-
+        //交易未被认可异常
         TransactionNotAcceptedException(String message, TransactionImpl transaction) {
             super(message, transaction.getBlock());
             this.transaction = transaction;

@@ -33,6 +33,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 处理新交易
+ * 验证交易的哈希
+ * 签名及验证
+ * 交易费用的计算
+ */
 final class TransactionImpl implements Transaction {
 
     static final class BuilderImpl implements Builder {
@@ -218,7 +224,6 @@ final class TransactionImpl implements Transaction {
             this.index = index;
             return this;
         }
-
     }
 
     private final short deadline;
@@ -275,14 +280,14 @@ final class TransactionImpl implements Transaction {
         this.senderId = builder.senderId;
         this.blockTimestamp = builder.blockTimestamp;
         this.fullHash = builder.fullHash;
-		this.ecBlockHeight = builder.ecBlockHeight;
+        this.ecBlockHeight = builder.ecBlockHeight;
         this.ecBlockId = builder.ecBlockId;
 
         List<Appendix.AbstractAppendix> list = new ArrayList<>();
         if ((this.attachment = builder.attachment) != null) {
             list.add(this.attachment);
         }
-        if ((this.message  = builder.message) != null) {
+        if ((this.message = builder.message) != null) {
             list.add(this.message);
         }
         if ((this.encryptedMessage = builder.encryptedMessage) != null) {
@@ -307,7 +312,7 @@ final class TransactionImpl implements Transaction {
         int appendagesSize = 0;
         for (Appendix appendage : appendages) {
             if (secretPhrase != null && appendage instanceof Appendix.Encryptable) {
-                ((Appendix.Encryptable)appendage).encrypt(secretPhrase);
+                ((Appendix.Encryptable) appendage).encrypt(secretPhrase);
             }
             appendagesSize += appendage.getSize();
         }
@@ -325,7 +330,7 @@ final class TransactionImpl implements Transaction {
         } else if (builder.signature != null) {
             this.signature = builder.signature;
         } else if (secretPhrase != null) {
-            if (getSenderPublicKey() != null && ! Arrays.equals(senderPublicKey, Crypto.getPublicKey(secretPhrase))) {
+            if (getSenderPublicKey() != null && !Arrays.equals(senderPublicKey, Crypto.getPublicKey(secretPhrase))) {
                 throw new NxtException.NotValidException("Secret phrase doesn't match transaction sender public key");
             }
             signature = Crypto.sign(bytes(), secretPhrase);
@@ -341,6 +346,7 @@ final class TransactionImpl implements Transaction {
         return deadline;
     }
 
+    //获取发送者的公钥
     @Override
     public byte[] getSenderPublicKey() {
         if (senderPublicKey == null) {
@@ -439,7 +445,7 @@ final class TransactionImpl implements Transaction {
     }
 
     void setIndex(int index) {
-        this.index = (short)index;
+        this.index = (short) index;
     }
 
     @Override
@@ -463,6 +469,7 @@ final class TransactionImpl implements Transaction {
         return attachment;
     }
 
+    //获得附件
     @Override
     public List<Appendix.AbstractAppendix> getAppendages() {
         return getAppendages(false);
@@ -503,7 +510,7 @@ final class TransactionImpl implements Transaction {
             } else {
                 fullHash = Crypto.sha256().digest(bytes());
             }
-            BigInteger bigInteger = new BigInteger(1, new byte[] {fullHash[7], fullHash[6], fullHash[5], fullHash[4], fullHash[3], fullHash[2], fullHash[1], fullHash[0]});
+            BigInteger bigInteger = new BigInteger(1, new byte[]{fullHash[7], fullHash[6], fullHash[5], fullHash[4], fullHash[3], fullHash[2], fullHash[1], fullHash[0]});
             id = bigInteger.longValue();
             stringId = bigInteger.toString();
         }
@@ -584,6 +591,7 @@ final class TransactionImpl implements Transaction {
         return prunablePlainMessage;
     }
 
+    //已删除加密信息
     boolean hasPrunablePlainMessage() {
         return prunablePlainMessage != null;
     }
@@ -652,6 +660,7 @@ final class TransactionImpl implements Transaction {
         return bytes;
     }
 
+    //新交易的创建方法
     static TransactionImpl.BuilderImpl newTransactionBuilder(byte[] bytes) throws NxtException.NotValidException {
         try {
             ByteBuffer buffer = ByteBuffer.wrap(bytes);
@@ -724,7 +733,7 @@ final class TransactionImpl implements Transaction {
                 throw new NxtException.NotValidException("Transaction bytes too long, " + buffer.remaining() + " extra bytes");
             }
             return builder;
-        } catch (NxtException.NotValidException|RuntimeException e) {
+        } catch (NxtException.NotValidException | RuntimeException e) {
             Logger.logDebugMessage("Failed to parse transaction bytes: " + Convert.toHexString(bytes));
             throw e;
         }
@@ -757,6 +766,7 @@ final class TransactionImpl implements Transaction {
         return builder;
     }
 
+    //获取未签名字节
     public byte[] getUnsignedBytes() {
         return zeroSignature(getBytes());
     }
@@ -785,13 +795,14 @@ final class TransactionImpl implements Transaction {
             appendage.loadPrunable(this);
             attachmentJSON.putAll(appendage.getJSONObject());
         }
-        if (! attachmentJSON.isEmpty()) {
+        if (!attachmentJSON.isEmpty()) {
             json.put("attachment", attachmentJSON);
         }
         json.put("version", version);
         return json;
     }
 
+    //得到删除的附件js数据
     @Override
     public JSONObject getPrunableAttachmentJSON() {
         JSONObject prunableJSON = null;
@@ -808,6 +819,7 @@ final class TransactionImpl implements Transaction {
         return prunableJSON;
     }
 
+    //解析交易
     static TransactionImpl parseTransaction(JSONObject transactionData) throws NxtException.NotValidException {
         TransactionImpl transaction = newTransactionBuilder(transactionData).build();
         if (transaction.getSignature() != null && !transaction.checkSignature()) {
@@ -816,6 +828,7 @@ final class TransactionImpl implements Transaction {
         return transaction;
     }
 
+    //新交易的构造
     static TransactionImpl.BuilderImpl newTransactionBuilder(JSONObject transactionData) throws NxtException.NotValidException {
         try {
             byte type = ((Long) transactionData.get("type")).byteValue();
@@ -863,13 +876,13 @@ final class TransactionImpl implements Transaction {
                 builder.appendix(Appendix.PrunableEncryptedMessage.parse(attachmentData));
             }
             return builder;
-        } catch (NxtException.NotValidException|RuntimeException e) {
+        } catch (NxtException.NotValidException | RuntimeException e) {
             Logger.logDebugMessage("Failed to parse transaction: " + transactionData.toJSONString());
             throw e;
         }
     }
 
-
+    //获得ec块的高度
     @Override
     public int getECBlockHeight() {
         return ecBlockHeight;
@@ -882,20 +895,23 @@ final class TransactionImpl implements Transaction {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof TransactionImpl && this.getId() == ((Transaction)o).getId();
+        return o instanceof TransactionImpl && this.getId() == ((Transaction) o).getId();
     }
 
+    //获取哈希值
     @Override
     public int hashCode() {
-        return (int)(getId() ^ (getId() >>> 32));
+        return (int) (getId() ^ (getId() >>> 32));
     }
 
+    //验证签名
     public boolean verifySignature() {
         return checkSignature() && Account.setOrVerify(getSenderId(), getSenderPublicKey());
     }
 
     private volatile boolean hasValidSignature = false;
 
+    //检查签名
     private boolean checkSignature() {
         if (!hasValidSignature) {
             hasValidSignature = signature != null && Crypto.verify(signature, zeroSignature(getBytes()), getSenderPublicKey(), useNQT());
@@ -904,7 +920,7 @@ final class TransactionImpl implements Transaction {
     }
 
     private int getSize() {
-        return signatureOffset() + 64  + (version > 0 ? 4 + 4 + 8 : 0) + appendagesSize;
+        return signatureOffset() + 64 + (version > 0 ? 4 + 4 + 8 : 0) + appendagesSize;
     }
 
     @Override
@@ -916,16 +932,17 @@ final class TransactionImpl implements Transaction {
         return fullSize;
     }
 
+    //签名
     private int signatureOffset() {
         return 1 + 1 + 4 + 2 + 32 + 8 + (useNQT() ? 8 + 8 + 32 : 4 + 4 + 8);
     }
-
+    //NXT，NQT应该是NXT的一个度量单位
+    //Nxt的总货币数是10亿个，每一个Nxt币还被分成了10^8个小的货币（NQT），NQT作为Nxt币的最小单位
     private boolean useNQT() {
-        return this.height > Constants.NQT_BLOCK
-                && (this.timestamp > (Constants.isTestnet ? 12908200 : 14271000)
-                || Nxt.getBlockchain().getHeight() >= Constants.NQT_BLOCK);
+        return this.height > Constants.NQT_BLOCK && (this.timestamp > (Constants.isTestnet ? 12908200 : 14271000)|| Nxt.getBlockchain().getHeight() >= Constants.NQT_BLOCK);
     }
 
+    // 0签名
     private byte[] zeroSignature(byte[] data) {
         int start = signatureOffset();
         for (int i = start; i < start + 64; i++) {
@@ -934,6 +951,7 @@ final class TransactionImpl implements Transaction {
         return data;
     }
 
+    //标记
     private int getFlags() {
         int flags = 0;
         int position = 1;
@@ -967,6 +985,7 @@ final class TransactionImpl implements Transaction {
         return flags;
     }
 
+    //类型和哈希验证交易
     @Override
     public void validate() throws NxtException.ValidationException {
         if (timestamp == 0 ? (deadline != 0 || feeNQT != 0) : (deadline < 1 || feeNQT <= 0)
@@ -986,7 +1005,7 @@ final class TransactionImpl implements Transaction {
             throw new NxtException.NotValidException("Invalid attachment " + attachment + " for transaction of type " + type);
         }
 
-        if (! type.canHaveRecipient()) {
+        if (!type.canHaveRecipient()) {
             if (recipientId != 0 || getAmountNQT() != 0) {
                 throw new NxtException.NotValidException("Transactions of this type must have recipient == 0, amount == 0");
             }
@@ -1001,7 +1020,7 @@ final class TransactionImpl implements Transaction {
         boolean validatingAtFinish = phasing != null && getSignature() != null && PhasingPoll.getPoll(getId()) != null;
         for (Appendix.AbstractAppendix appendage : appendages) {
             appendage.loadPrunable(this);
-            if (! appendage.verifyVersion(this.version)) {
+            if (!appendage.verifyVersion(this.version)) {
                 throw new NxtException.NotValidException("Invalid attachment version " + appendage.getVersion()
                         + " for transaction version " + this.version);
             }
@@ -1071,11 +1090,13 @@ final class TransactionImpl implements Transaction {
         }
     }
 
+    //撤销未确认
     void undoUnconfirmed() {
         Account senderAccount = Account.getAccount(getSenderId());
         type.undoUnconfirmed(this, senderAccount);
     }
 
+    //是否连接重复
     boolean attachmentIsDuplicate(Map<TransactionType, Map<String, Integer>> duplicates, boolean atAcceptanceHeight) {
         if (!attachmentIsPhased() && !atAcceptanceHeight) {
             // can happen for phased transactions having non-phasable attachment
@@ -1085,7 +1106,7 @@ final class TransactionImpl implements Transaction {
             if (AccountRestrictions.isBlockDuplicate(this, duplicates)) {
                 return true;
             }
-            // all are checked at acceptance height for block duplicates
+            // all are checked at acceptance height for block duplicates//阻止重复
             if (type.isBlockDuplicate(this, duplicates)) {
                 return true;
             }
@@ -1098,10 +1119,12 @@ final class TransactionImpl implements Transaction {
         return type.isDuplicate(this, duplicates);
     }
 
+    //未确认的重复
     boolean isUnconfirmedDuplicate(Map<TransactionType, Map<String, Integer>> duplicates) {
         return type.isUnconfirmedDuplicate(this, duplicates);
     }
 
+    //获得最低费用价格
     private long getMinimumFeeNQT(int blockchainHeight) {
         long totalFee = 0;
         for (Appendix.AbstractAppendix appendage : appendages) {

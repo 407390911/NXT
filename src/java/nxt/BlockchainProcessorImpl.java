@@ -250,11 +250,12 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
                 }
                 //
                 // Restore prunable data
-                //
+                //获取到现在的时间
                 int now = Nxt.getEpochTime();
                 if (!isRestoring && !prunableTransactions.isEmpty() && now - lastRestoreTime > 60 * 60) {
                     isRestoring = true;
                     lastRestoreTime = now;
+                    //提交
                     networkService.submit(new RestorePrunableDataTask());
                 }
             } catch (InterruptedException e) {
@@ -332,6 +333,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
                 }
 
                 blockchain.updateLock();
+
                 try {
                     if (betterCumulativeDifficulty.compareTo(blockchain.getLastBlock().getCumulativeDifficulty()) <= 0) {
                         return;
@@ -344,9 +346,11 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
 
                     int confirmations = 0;
                     for (Peer otherPeer : connectedPublicPeers) {
+
                         if (confirmations >= numberOfForkConfirmations) {
                             break;
                         }
+
                         if (peer.getHost().equals(otherPeer.getHost())) {
                             continue;
                         }
@@ -359,10 +363,12 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
                             confirmations++;
                             continue;
                         }
+
                         Block otherPeerCommonBlock = blockchain.getBlock(otherPeerCommonBlockId);
                         if (blockchain.getHeight() - otherPeerCommonBlock.getHeight() >= 720) {
                             continue;
                         }
+
                         String otherPeerCumulativeDifficulty;
                         JSONObject otherPeerResponse = peer.send(getCumulativeDifficultyRequest);
                         if (otherPeerResponse == null || (otherPeerCumulativeDifficulty = (String) response.get("cumulativeDifficulty")) == null) {
@@ -413,25 +419,32 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
                 }
 
                 JSONObject response = peer.send(JSON.prepareRequest(milestoneBlockIdsRequest));
+
                 if (response == null) {
                     return 0;
                 }
+
                 JSONArray milestoneBlockIds = (JSONArray) response.get("milestoneBlockIds");
+
                 if (milestoneBlockIds == null) {
                     return 0;
                 }
+
                 if (milestoneBlockIds.isEmpty()) {
                     return Genesis.GENESIS_BLOCK_ID;
                 }
+
                 // prevent overloading with blockIds
                 if (milestoneBlockIds.size() > 20) {
                     Logger.logDebugMessage("Obsolete or rogue peer " + peer.getHost() + " sends too many milestoneBlockIds, blacklisting");
                     peer.blacklist("Too many milestoneBlockIds");
                     return 0;
                 }
+
                 if (Boolean.TRUE.equals(response.get("last"))) {
                     peerHasMore = false;
                 }
+
                 for (Object milestoneBlockId : milestoneBlockIds) {
                     long blockId = Convert.parseUnsignedLong((String) milestoneBlockId);
                     if (BlockDb.hasBlock(blockId)) {
@@ -443,7 +456,6 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
                     lastMilestoneBlockId = (String) milestoneBlockId;
                 }
             }
-
         }
 
         private List<Long> getBlockIdsAfterCommon(final Peer peer, final long startBlockId, final boolean countFromStart) {

@@ -37,14 +37,14 @@ final class TransactionDb {
     }
 
     static TransactionImpl findTransaction(long transactionId, int height) {
-        // Check the block cache
+        // Check the block cache检查块缓存
         synchronized (BlockDb.blockCache) {
             TransactionImpl transaction = BlockDb.transactionCache.get(transactionId);
             if (transaction != null) {
                 return transaction.getHeight() <= height ? transaction : null;
             }
         }
-        // Search the database
+        // Search the database搜索数据库
         try (Connection con = Db.db.getConnection();
              PreparedStatement pstmt = con.prepareStatement("SELECT * FROM transaction WHERE id = ?")) {
             pstmt.setLong(1, transactionId);
@@ -60,14 +60,14 @@ final class TransactionDb {
             throw new RuntimeException("Transaction already in database, id = " + transactionId + ", does not pass validation!", e);
         }
     }
-
+    //哈希查找交易,返回一个交易的实现类对象
     static TransactionImpl findTransactionByFullHash(byte[] fullHash) {
         return findTransactionByFullHash(fullHash, Integer.MAX_VALUE);
     }
 
     static TransactionImpl findTransactionByFullHash(byte[] fullHash, int height) {
         long transactionId = Convert.fullHashToId(fullHash);
-        // Check the cache
+        // Check the cache检查缓存
         synchronized(BlockDb.blockCache) {
             TransactionImpl transaction = BlockDb.transactionCache.get(transactionId);
             if (transaction != null) {
@@ -92,7 +92,7 @@ final class TransactionDb {
                     + ", does not pass validation!", e);
         }
     }
-
+    //是否有交易
     static boolean hasTransaction(long transactionId) {
         return hasTransaction(transactionId, Integer.MAX_VALUE);
     }
@@ -116,7 +116,7 @@ final class TransactionDb {
             throw new RuntimeException(e.toString(), e);
         }
     }
-
+    //是否通过哈希找到交易
     static boolean hasTransactionByFullHash(byte[] fullHash) {
         return Arrays.equals(fullHash, getFullHash(Convert.fullHashToId(fullHash)));
     }
@@ -131,7 +131,7 @@ final class TransactionDb {
                         Arrays.equals(transaction.fullHash(), fullHash));
             }
         }
-        // Search the database
+        // Search the database   搜索数据库
         try (Connection con = Db.db.getConnection();
              PreparedStatement pstmt = con.prepareStatement("SELECT full_hash, height FROM transaction WHERE id = ?")) {
             pstmt.setLong(1, transactionId);
@@ -144,7 +144,7 @@ final class TransactionDb {
     }
 
     static byte[] getFullHash(long transactionId) {
-        // Check the block cache
+        // Check the block cache  检查区块缓存
         synchronized(BlockDb.blockCache) {
             TransactionImpl transaction = BlockDb.transactionCache.get(transactionId);
             if (transaction != null) {
@@ -162,7 +162,7 @@ final class TransactionDb {
             throw new RuntimeException(e.toString(), e);
         }
     }
-
+    //加载交易
     static TransactionImpl loadTransaction(Connection con, ResultSet rs) throws NxtException.NotValidException {
         try {
 
@@ -241,7 +241,7 @@ final class TransactionDb {
             throw new RuntimeException(e.toString(), e);
         }
     }
-
+    //通过区块id找到区块交易
     static List<TransactionImpl> findBlockTransactions(long blockId) {
         // Check the block cache
         synchronized(BlockDb.blockCache) {
@@ -257,7 +257,7 @@ final class TransactionDb {
             throw new RuntimeException(e.toString(), e);
         }
     }
-
+    //找区块交易
     static List<TransactionImpl> findBlockTransactions(Connection con, long blockId) {
         try (PreparedStatement pstmt = con.prepareStatement("SELECT * FROM transaction WHERE block_id = ? ORDER BY transaction_index")) {
             pstmt.setLong(1, blockId);
@@ -276,7 +276,7 @@ final class TransactionDb {
                     + " does not pass validation!", e);
         }
     }
-
+    //找到删除交易
     static List<PrunableTransaction> findPrunableTransactions(Connection con, int minTimestamp, int maxTimestamp) {
         List<PrunableTransaction> result = new ArrayList<>();
         try (PreparedStatement pstmt = con.prepareStatement("SELECT id, type, subtype, "
@@ -304,7 +304,7 @@ final class TransactionDb {
         }
         return result;
     }
-
+    //保存交易
     static void saveTransactions(Connection con, List<TransactionImpl> transactions) {
         try {
             short index = 0;
@@ -360,6 +360,7 @@ final class TransactionDb {
                     pstmt.setShort(++i, index++);
                     pstmt.executeUpdate();
                 }
+
                 if (transaction.referencedTransactionFullHash() != null) {
                     try (PreparedStatement pstmt = con.prepareStatement("INSERT INTO referenced_transaction "
                          + "(transaction_id, referenced_transaction_id) VALUES (?, ?)")) {
@@ -380,7 +381,7 @@ final class TransactionDb {
         private final boolean prunableAttachment;
         private final boolean prunablePlainMessage;
         private final boolean prunableEncryptedMessage;
-
+        //删除交易
         public PrunableTransaction(long id, TransactionType transactionType, boolean prunableAttachment,
                                    boolean prunablePlainMessage, boolean prunableEncryptedMessage) {
             this.id = id;
@@ -393,7 +394,7 @@ final class TransactionDb {
         public long getId() {
             return id;
         }
-
+        //获取交易类型
         public TransactionType getTransactionType() {
             return transactionType;
         }

@@ -23,6 +23,7 @@ import nxt.db.EntityDbTable;
 import nxt.peer.Peer;
 import nxt.peer.Peers;
 import nxt.util.*;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -33,41 +34,70 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 交易处理的实现类
+ * 这个类主要是处理交易/未确认的交易,缓存交易,广播交易
+ * 监听交易,交易的过程
+ */
 final class TransactionProcessorImpl implements TransactionProcessor {
-
+    //    重新广播新的交易
     private static final boolean enableTransactionRebroadcasting = Nxt.getBooleanProperty("nxt.enableTransactionRebroadcasting");
+    //测试未确认交易
     private static final boolean testUnconfirmedTransactions = Nxt.getBooleanProperty("nxt.testUnconfirmedTransactions");
+    //不允许内存中未确认的交易数超过这个数
     private static final int maxUnconfirmedTransactions;
+
     static {
         int n = Nxt.getIntProperty("nxt.maxUnconfirmedTransactions");
+        //若设置为0或负数，则设置为最大的值
         maxUnconfirmedTransactions = n <= 0 ? Integer.MAX_VALUE : n;
     }
 
     private static final TransactionProcessorImpl instance = new TransactionProcessorImpl();
 
+    //获得TransactionProcessorImpl实例
     static TransactionProcessorImpl getInstance() {
         return instance;
     }
 
     private final Map<DbKey, UnconfirmedTransaction> transactionCache = new HashMap<>();
+    //控制缓存的初始化
     private volatile boolean cacheInitialized = false;
 
     final DbKey.LongKeyFactory<UnconfirmedTransaction> unconfirmedTransactionDbKeyFactory = new DbKey.LongKeyFactory<UnconfirmedTransaction>("id") {
-
+        //        /**
+//         *
+//         * @param unconfirmedTransaction 未确认的交易
+//         * @return 数据库的key
+//         */
         @Override
         public DbKey newKey(UnconfirmedTransaction unconfirmedTransaction) {
             return unconfirmedTransaction.getTransaction().getDbKey();
         }
 
     };
-
+    //实体数据库表
+    //Kiwi：实现抽象DAL。完成unconfirmed_transaction表的DAL
     private final EntityDbTable<UnconfirmedTransaction> unconfirmedTransactionTable = new EntityDbTable<UnconfirmedTransaction>("unconfirmed_transaction", unconfirmedTransactionDbKeyFactory) {
-
+        //        /**
+//         * 加载
+//         * @param con   连接
+//         * @param rs 结果集
+//         * @param dbKey 数据库的key
+//         * @return 未确认的交易
+//         * @throws SQLException
+//         */
         @Override
         protected UnconfirmedTransaction load(Connection con, ResultSet rs, DbKey dbKey) throws SQLException {
             return new UnconfirmedTransaction(rs);
         }
 
+        //        /**
+//         * 保存
+//         * @param con 连接
+//         * @param unconfirmedTransaction 未确认的交易
+//         * @throws SQLException
+//         */
         @Override
         protected void save(Connection con, UnconfirmedTransaction unconfirmedTransaction) throws SQLException {
             unconfirmedTransaction.save(con);
@@ -76,11 +106,18 @@ final class TransactionProcessorImpl implements TransactionProcessor {
             }
         }
 
+//        /**
+//         * 利率
+//         * @param height 交易高度
+//         */
+
         @Override
         public void rollback(int height) {
             try (Connection con = Db.db.getConnection();
+                 //事先准备好的声明
                  PreparedStatement pstmt = con.prepareStatement("SELECT * FROM unconfirmed_transaction WHERE height > ?")) {
                 pstmt.setInt(1, height);
+                //执行查询的结果集
                 try (ResultSet rs = pstmt.executeQuery()) {
                     while (rs.next()) {
                         UnconfirmedTransaction unconfirmedTransaction = load(con, rs, null);
@@ -95,22 +132,24 @@ final class TransactionProcessorImpl implements TransactionProcessor {
             unconfirmedDuplicates.clear();
         }
 
+        //关闭
         @Override
         public void truncate() {
             super.truncate();
             clearCache();
         }
 
+        //默认排序
         @Override
         protected String defaultSort() {
+            //订单的交易高度ASC  费用每字节DESC
             return " ORDER BY transaction_height ASC, fee_per_byte DESC, arrival_timestamp ASC, id ASC ";
         }
-
     };
 
     private final Set<TransactionImpl> broadcastedTransactions = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    private final Listeners<List<? extends Transaction>,Event> transactionListeners = new Listeners<>();
-
+    private final Listeners<List<? extends Transaction>, Event> transactionListeners = new Listeners<>();
+    //等待交易集
     private final PriorityQueue<UnconfirmedTransaction> waitingTransactions = new PriorityQueue<UnconfirmedTransaction>(
             (UnconfirmedTransaction o1, UnconfirmedTransaction o2) -> {
                 int result;
@@ -128,9 +167,8 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                     return result;
                 }
                 return Long.compare(o2.getId(), o1.getId());
-            })
-    {
-
+            }) {
+        //是否添加未确认交易
         @Override
         public boolean add(UnconfirmedTransaction unconfirmedTransaction) {
             if (!super.add(unconfirmedTransaction)) {
@@ -142,17 +180,16 @@ final class TransactionProcessorImpl implements TransactionProcessor {
             }
             return true;
         }
-
     };
-
+    //未确认交易副本集
     private final Map<TransactionType, Map<String, Integer>> unconfirmedDuplicates = new HashMap<>();
 
-
+    //删除未确认交易的线程
     private final Runnable removeUnconfirmedTransactionsThread = () -> {
 
         try {
             try {
-                if (Nxt.getBlockchainProcessor().isDownloading() && ! testUnconfirmedTransactions) {
+                if (Nxt.getBlockchainProcessor().isDownloading() && !testUnconfirmedTransactions) {
                     return;
                 }
                 List<UnconfirmedTransaction> expiredTransactions = new ArrayList<>();
@@ -192,12 +229,12 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
 
     };
-
+    //重新广播交易的线程
     private final Runnable rebroadcastTransactionsThread = () -> {
 
         try {
             try {
-                if (Nxt.getBlockchainProcessor().isDownloading() && ! testUnconfirmedTransactions) {
+                if (Nxt.getBlockchainProcessor().isDownloading() && !testUnconfirmedTransactions) {
                     return;
                 }
                 List<Transaction> transactionList = new ArrayList<>();
@@ -222,16 +259,15 @@ final class TransactionProcessorImpl implements TransactionProcessor {
             t.printStackTrace();
             System.exit(1);
         }
-
     };
-
+    //处理交易线程
     private final Runnable processTransactionsThread = () -> {
-
         try {
             try {
-                if (Nxt.getBlockchainProcessor().isDownloading() && ! testUnconfirmedTransactions) {
+                if (Nxt.getBlockchainProcessor().isDownloading() && !testUnconfirmedTransactions) {
                     return;
                 }
+                //
                 Peer peer = Peers.getAnyPeer(Peer.State.CONNECTED, true);
                 if (peer == null) {
                     return;
@@ -246,13 +282,13 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                 if (response == null) {
                     return;
                 }
-                JSONArray transactionsData = (JSONArray)response.get("unconfirmedTransactions");
+                JSONArray transactionsData = (JSONArray) response.get("unconfirmedTransactions");
                 if (transactionsData == null || transactionsData.size() == 0) {
                     return;
                 }
                 try {
                     processPeerTransactions(transactionsData);
-                } catch (NxtException.ValidationException|RuntimeException e) {
+                } catch (NxtException.ValidationException | RuntimeException e) {
                     peer.blacklist(e);
                 }
             } catch (Exception e) {
@@ -265,12 +301,12 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
 
     };
-
+    //处理等待交易线程
     private final Runnable processWaitingTransactionsThread = () -> {
 
         try {
             try {
-                if (Nxt.getBlockchainProcessor().isDownloading() && ! testUnconfirmedTransactions) {
+                if (Nxt.getBlockchainProcessor().isDownloading() && !testUnconfirmedTransactions) {
                     return;
                 }
                 processWaitingTransactions();
@@ -287,17 +323,19 @@ final class TransactionProcessorImpl implements TransactionProcessor {
 
 
     private TransactionProcessorImpl() {
+        //非客户端未连接的
         if (!Constants.isLightClient) {
             if (!Constants.isOffline) {
-                ThreadPool.scheduleThread("ProcessTransactions", processTransactionsThread, 5);
-                ThreadPool.runAfterStart(this::rebroadcastAllUnconfirmedTransactions);
-                ThreadPool.scheduleThread("RebroadcastTransactions", rebroadcastTransactionsThread, 23);
+                ThreadPool.scheduleThread("ProcessTransactions", processTransactionsThread, 5);//处理交易
+                ThreadPool.runAfterStart(this::rebroadcastAllUnconfirmedTransactions);//重播所有未确认的交易
+                ThreadPool.scheduleThread("RebroadcastTransactions", rebroadcastTransactionsThread, 23);//重播的方法
             }
             ThreadPool.scheduleThread("RemoveUnconfirmedTransactions", removeUnconfirmedTransactionsThread, 20);
             ThreadPool.scheduleThread("ProcessWaitingTransactions", processWaitingTransactionsThread, 1);
         }
     }
 
+    //添加交易的监听
     @Override
     public boolean addListener(Listener<List<? extends Transaction>> listener, Event eventType) {
         return transactionListeners.addListener(listener, eventType);
@@ -308,10 +346,12 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         return transactionListeners.removeListener(listener, eventType);
     }
 
+    //刷新监听
     void notifyListeners(List<? extends Transaction> transactions, Event eventType) {
         transactionListeners.notify(transactions, eventType);
     }
 
+    //不同参数获取所有未确认交易
     @Override
     public DbIterator<UnconfirmedTransaction> getAllUnconfirmedTransactions() {
         return unconfirmedTransactionTable.getAll(0, -1);
@@ -351,6 +391,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         return unconfirmedTransactionTable.get(dbKey);
     }
 
+    //   获取所有未确认的交易id
     private List<Long> getAllUnconfirmedTransactionIds() {
         List<Long> result = new ArrayList<>();
         try (Connection con = Db.db.getConnection();
@@ -364,7 +405,8 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
         return result;
     }
-
+    
+    //获取所有等待交易
     @Override
     public UnconfirmedTransaction[] getAllWaitingTransactions() {
         UnconfirmedTransaction[] transactions;
@@ -378,10 +420,12 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         return transactions;
     }
 
+    //获取等待交易
     Collection<UnconfirmedTransaction> getWaitingTransactions() {
         return Collections.unmodifiableCollection(waitingTransactions);
     }
 
+    //获取所有交易的广播
     @Override
     public TransactionImpl[] getAllBroadcastedTransactions() {
         BlockchainImpl.getInstance().readLock();
@@ -392,6 +436,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
     }
 
+    //广播交易
     @Override
     public void broadcast(Transaction transaction) throws NxtException.ValidationException {
         BlockchainImpl.getInstance().writeLock();
@@ -400,7 +445,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                 Logger.logMessage("Transaction " + transaction.getStringId() + " already in blockchain, will not broadcast again");
                 return;
             }
-            if (getUnconfirmedTransaction(((TransactionImpl)transaction).getDbKey()) != null) {
+            if (getUnconfirmedTransaction(((TransactionImpl) transaction).getDbKey()) != null) {
                 if (enableTransactionRebroadcasting) {
                     broadcastedTransactions.add((TransactionImpl) transaction);
                     Logger.logMessage("Transaction " + transaction.getStringId() + " already in unconfirmed pool, will re-broadcast");
@@ -431,12 +476,14 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
     }
 
+    //处理对等交易
     @Override
     public void processPeerTransactions(JSONObject request) throws NxtException.ValidationException {
-        JSONArray transactionsData = (JSONArray)request.get("transactions");
+        JSONArray transactionsData = (JSONArray) request.get("transactions");
         processPeerTransactions(transactionsData);
     }
 
+    //清空的未确认的交易
     @Override
     public void clearUnconfirmedTransactions() {
         BlockchainImpl.getInstance().writeLock();
@@ -469,6 +516,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
     }
 
+    //重新排列所有未确认的交易
     @Override
     public void requeueAllUnconfirmedTransactions() {
         BlockchainImpl.getInstance().writeLock();
@@ -506,6 +554,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
     }
 
+    //重播所有未确认的交易
     @Override
     public void rebroadcastAllUnconfirmedTransactions() {
         BlockchainImpl.getInstance().writeLock();
@@ -524,6 +573,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
     }
 
+    //删除未确认的交易
     void removeUnconfirmedTransaction(TransactionImpl transaction) {
         if (!Db.db.isInTransaction()) {
             try {
@@ -554,6 +604,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
     }
 
+    //等待
     @Override
     public void processLater(Collection<? extends Transaction> transactions) {
         long currentTime = System.currentTimeMillis();
@@ -564,14 +615,15 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                 if (TransactionDb.hasTransaction(transaction.getId())) {
                     continue;
                 }
-                ((TransactionImpl)transaction).unsetBlock();
-                waitingTransactions.add(new UnconfirmedTransaction((TransactionImpl)transaction, Math.min(currentTime, Convert.fromEpochTime(transaction.getTimestamp()))));
+                ((TransactionImpl) transaction).unsetBlock();
+                waitingTransactions.add(new UnconfirmedTransaction((TransactionImpl) transaction, Math.min(currentTime, Convert.fromEpochTime(transaction.getTimestamp()))));
             }
         } finally {
             BlockchainImpl.getInstance().writeUnlock();
         }
     }
 
+    //处理等待交易
     void processWaitingTransactions() {
         BlockchainImpl.getInstance().writeLock();
         try {
@@ -593,7 +645,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                                 || currentTime - Convert.toEpochTime(unconfirmedTransaction.getArrivalTimestamp()) > 3600) {
                             iterator.remove();
                         }
-                    } catch (NxtException.ValidationException|RuntimeException e) {
+                    } catch (NxtException.ValidationException | RuntimeException e) {
                         iterator.remove();
                     }
                 }
@@ -606,6 +658,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
     }
 
+    //处理对等交易
     private void processPeerTransactions(JSONArray transactionsData) throws NxtException.NotValidException {
         if (Nxt.getBlockchain().getHeight() <= Constants.LAST_KNOWN_BLOCK && !testUnconfirmedTransactions) {
             return;
@@ -637,7 +690,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                 addedUnconfirmedTransactions.add(transaction);
 
             } catch (NxtException.NotCurrentlyValidException ignore) {
-            } catch (NxtException.ValidationException|RuntimeException e) {
+            } catch (NxtException.ValidationException | RuntimeException e) {
                 Logger.logDebugMessage(String.format("Invalid transaction from peer: %s", ((JSONObject) transactionData).toJSONString()), e);
                 exceptions.add(e);
             }
@@ -654,6 +707,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
     }
 
+    //处理交易
     private void processTransaction(UnconfirmedTransaction unconfirmedTransaction) throws NxtException.ValidationException {
         TransactionImpl transaction = unconfirmedTransaction.getTransaction();
         int curTime = Nxt.getEpochTime();
@@ -679,7 +733,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                     throw new NxtException.ExistingTransactionException("Transaction already processed");
                 }
 
-                if (! transaction.verifySignature()) {
+                if (!transaction.verifySignature()) {
                     if (Account.getAccount(transaction.getSenderId()) != null) {
                         throw new NxtException.NotValidException("Transaction signature verification failed");
                     } else {
@@ -687,7 +741,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                     }
                 }
 
-                if (! transaction.applyUnconfirmed()) {
+                if (!transaction.applyUnconfirmed()) {
                     throw new NxtException.InsufficientBalanceException("Insufficient balance");
                 }
 
@@ -709,6 +763,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
     }
 
+    //缓存的未确认的交易比较器
     private static final Comparator<UnconfirmedTransaction> cachedUnconfirmedTransactionComparator = (UnconfirmedTransaction t1, UnconfirmedTransaction t2) -> {
         int compare;
         // Sort by transaction_height ASC
@@ -728,9 +783,9 @@ final class TransactionProcessorImpl implements TransactionProcessor {
     };
 
     /**
-     * Get the cached unconfirmed transactions
+     * Get the cached unconfirmed transactions//获取缓存未确认的交易
      *
-     * @param   exclude                 List of transaction identifiers to exclude
+     * @param exclude List of transaction identifiers to exclude//要排除的事务标识符列表
      */
     @Override
     public SortedSet<? extends Transaction> getCachedUnconfirmedTransactions(List<String> exclude) {
@@ -740,7 +795,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
             //
             // Initialize the unconfirmed transaction cache if it hasn't been done yet
             //
-            synchronized(transactionCache) {
+            synchronized (transactionCache) {
                 if (!cacheInitialized) {
                     DbIterator<UnconfirmedTransaction> it = getAllUnconfirmedTransactions();
                     while (it.hasNext()) {
@@ -767,11 +822,11 @@ final class TransactionProcessorImpl implements TransactionProcessor {
     /**
      * Restore expired prunable data
      *
-     * @param   transactions                        Transactions containing prunable data
-     * @return                                      Processed transactions
-     * @throws  NxtException.NotValidException    Transaction is not valid
+     * @param transactions Transactions containing prunable data//交易包含删除的数据
+     * @return Processed transactions//返回处理的交易
+     * @throws NxtException.NotValidException Transaction is not valid//交易无效
      */
-    @Override
+    @Override//恢复删除的数据
     public List<Transaction> restorePrunableData(JSONArray transactions) throws NxtException.NotValidException {
         List<Transaction> processed = new ArrayList<>();
         Nxt.getBlockchain().readLock();
@@ -782,14 +837,15 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                 // Check each transaction returned by the archive peer
                 //
                 for (Object transactionJSON : transactions) {
-                    TransactionImpl transaction = TransactionImpl.parseTransaction((JSONObject)transactionJSON);
+                    TransactionImpl transaction = TransactionImpl.parseTransaction((JSONObject) transactionJSON);
                     TransactionImpl myTransaction = TransactionDb.findTransactionByFullHash(transaction.fullHash());
                     if (myTransaction != null) {
                         boolean foundAllData = true;
                         //
                         // Process each prunable appendage
                         //
-                        appendageLoop: for (Appendix.AbstractAppendix appendage : transaction.getAppendages()) {
+                        appendageLoop:
+                        for (Appendix.AbstractAppendix appendage : transaction.getAppendages()) {
                             if ((appendage instanceof Appendix.Prunable)) {
                                 //
                                 // Don't load the prunable data if we already have the data
@@ -797,7 +853,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                                 for (Appendix.AbstractAppendix myAppendage : myTransaction.getAppendages()) {
                                     if (myAppendage.getClass() == appendage.getClass()) {
                                         myAppendage.loadPrunable(myTransaction, true);
-                                        if (((Appendix.Prunable)myAppendage).hasPrunableData()) {
+                                        if (((Appendix.Prunable) myAppendage).hasPrunableData()) {
                                             Logger.logDebugMessage(String.format("Already have prunable data for transaction %s %s appendage",
                                                     myTransaction.getStringId(), myAppendage.getAppendixName()));
                                             continue appendageLoop;
@@ -808,10 +864,10 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                                 //
                                 // Load the prunable data
                                 //
-                                if (((Appendix.Prunable)appendage).hasPrunableData()) {
+                                if (((Appendix.Prunable) appendage).hasPrunableData()) {
                                     Logger.logDebugMessage(String.format("Loading prunable data for transaction %s %s appendage",
                                             Long.toUnsignedString(transaction.getId()), appendage.getAppendixName()));
-                                    ((Appendix.Prunable)appendage).restorePrunableData(transaction, myTransaction.getBlockTimestamp(), myTransaction.getHeight());
+                                    ((Appendix.Prunable) appendage).restorePrunableData(transaction, myTransaction.getBlockTimestamp(), myTransaction.getHeight());
                                 } else {
                                     foundAllData = false;
                                 }
