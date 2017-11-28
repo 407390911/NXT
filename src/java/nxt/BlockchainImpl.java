@@ -13,7 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
+//Kiwi：区块链表/缓存的CRUD
 package nxt;
 
 import nxt.db.DbIterator;
@@ -30,14 +30,16 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class BlockchainImpl implements Blockchain {
-
+    //region 单例模式
     private static final BlockchainImpl instance = new BlockchainImpl();
 
     static BlockchainImpl getInstance() {
         return instance;
     }
 
-    private BlockchainImpl() {}
+    //endregion
+    private BlockchainImpl() {
+    }
 
     private final ReadWriteUpdateLock lock = new ReadWriteUpdateLock();
     private final AtomicReference<BlockImpl> lastBlock = new AtomicReference<>();
@@ -91,6 +93,7 @@ final class BlockchainImpl implements Blockchain {
         return last == null ? 0 : last.getTimestamp();
     }
 
+    //缓存中的区块信息满足要求？返回：查询数据库
     @Override
     public BlockImpl getLastBlock(int timestamp) {
         BlockImpl block = lastBlock.get();
@@ -172,7 +175,7 @@ final class BlockchainImpl implements Blockchain {
     @Override
     public int getBlockCount(long accountId) {
         try (Connection con = Db.db.getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT COUNT(*) FROM block WHERE generator_id = ?")) {
+             PreparedStatement pstmt = con.prepareStatement("SELECT COUNT(*) FROM block WHERE generator_id = ?")) {
             pstmt.setLong(1, accountId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 rs.next();
@@ -192,7 +195,7 @@ final class BlockchainImpl implements Blockchain {
     public List<Long> getBlockIdsAfter(long blockId, int limit) {
         // Check the block cache
         List<Long> result = new ArrayList<>(BlockDb.BLOCK_CACHE_SIZE);
-        synchronized(BlockDb.blockCache) {
+        synchronized (BlockDb.blockCache) {
             BlockImpl block = BlockDb.blockCache.get(blockId);
             if (block != null) {
                 Collection<BlockImpl> cacheMap = BlockDb.heightMap.tailMap(block.getHeight() + 1).values();
@@ -207,9 +210,9 @@ final class BlockchainImpl implements Blockchain {
         }
         // Search the database
         try (Connection con = Db.db.getConnection();
-                PreparedStatement pstmt = con.prepareStatement("SELECT id FROM block "
-                            + "WHERE db_id > IFNULL ((SELECT db_id FROM block WHERE id = ?), " + Long.MAX_VALUE + ") "
-                            + "ORDER BY db_id ASC LIMIT ?")) {
+             PreparedStatement pstmt = con.prepareStatement("SELECT id FROM block "
+                     + "WHERE db_id > IFNULL ((SELECT db_id FROM block WHERE id = ?), " + Long.MAX_VALUE + ") "
+                     + "ORDER BY db_id ASC LIMIT ?")) {
             pstmt.setLong(1, blockId);
             pstmt.setInt(2, limit);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -230,7 +233,7 @@ final class BlockchainImpl implements Blockchain {
         }
         // Check the block cache
         List<BlockImpl> result = new ArrayList<>(BlockDb.BLOCK_CACHE_SIZE);
-        synchronized(BlockDb.blockCache) {
+        synchronized (BlockDb.blockCache) {
             BlockImpl block = BlockDb.blockCache.get(blockId);
             if (block != null) {
                 Collection<BlockImpl> cacheMap = BlockDb.heightMap.tailMap(block.getHeight() + 1).values();
@@ -246,9 +249,9 @@ final class BlockchainImpl implements Blockchain {
 
         // Search the database
         try (Connection con = Db.db.getConnection();
-                PreparedStatement pstmt = con.prepareStatement("SELECT * FROM block "
-                        + "WHERE db_id > IFNULL ((SELECT db_id FROM block WHERE id = ?), " + Long.MAX_VALUE + ") "
-                        + "ORDER BY db_id ASC LIMIT ?")) {
+             PreparedStatement pstmt = con.prepareStatement("SELECT * FROM block "
+                     + "WHERE db_id > IFNULL ((SELECT db_id FROM block WHERE id = ?), " + Long.MAX_VALUE + ") "
+                     + "ORDER BY db_id ASC LIMIT ?")) {
             pstmt.setLong(1, blockId);
             pstmt.setInt(2, limit);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -269,7 +272,7 @@ final class BlockchainImpl implements Blockchain {
         }
         // Check the block cache
         List<BlockImpl> result = new ArrayList<>(BlockDb.BLOCK_CACHE_SIZE);
-        synchronized(BlockDb.blockCache) {
+        synchronized (BlockDb.blockCache) {
             BlockImpl block = BlockDb.blockCache.get(blockId);
             if (block != null) {
                 Collection<BlockImpl> cacheMap = BlockDb.heightMap.tailMap(block.getHeight() + 1).values();
@@ -285,9 +288,9 @@ final class BlockchainImpl implements Blockchain {
         }
         // Search the database
         try (Connection con = Db.db.getConnection();
-                PreparedStatement pstmt = con.prepareStatement("SELECT * FROM block "
-                        + "WHERE db_id > IFNULL ((SELECT db_id FROM block WHERE id = ?), " + Long.MAX_VALUE + ") "
-                        + "ORDER BY db_id ASC LIMIT ?")) {
+             PreparedStatement pstmt = con.prepareStatement("SELECT * FROM block "
+                     + "WHERE db_id > IFNULL ((SELECT db_id FROM block WHERE id = ?), " + Long.MAX_VALUE + ") "
+                     + "ORDER BY db_id ASC LIMIT ?")) {
             pstmt.setLong(1, blockId);
             pstmt.setInt(2, blockList.size());
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -485,8 +488,8 @@ final class BlockchainImpl implements Blockchain {
                 pstmt.setInt(++i, height);
             }
             int prunableExpiration = Math.max(0, Constants.INCLUDE_EXPIRED_PRUNABLE && includeExpiredPrunable ?
-                                        Nxt.getEpochTime() - Constants.MAX_PRUNABLE_LIFETIME :
-                                        Nxt.getEpochTime() - Constants.MIN_PRUNABLE_LIFETIME);
+                    Nxt.getEpochTime() - Constants.MAX_PRUNABLE_LIFETIME :
+                    Nxt.getEpochTime() - Constants.MIN_PRUNABLE_LIFETIME);
             if (withMessage) {
                 pstmt.setInt(++i, prunableExpiration);
             }

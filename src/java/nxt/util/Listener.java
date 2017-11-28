@@ -13,7 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
+//Kiwi:监听器
 package nxt.util;
 
 public interface Listener<T> {

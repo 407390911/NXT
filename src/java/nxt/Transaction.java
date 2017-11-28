@@ -42,7 +42,7 @@ public interface Transaction {
         //附件消息-发布关键公告类
         Builder appendix(Appendix.PublicKeyAnnouncement publicKeyAnnouncement);
 
-        //附件消息-修剪计划消息类
+        //附件消息-修剪（plain-平原、素的）消息类
         Builder appendix(Appendix.PrunablePlainMessage prunablePlainMessage);
 
         //附件消息-修剪加密消息类

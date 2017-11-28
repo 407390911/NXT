@@ -19,6 +19,8 @@ package nxt.util;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+//并发相关的锁
+
 /**
  * <p>
  * A read or update lock allows shared access while a write lock enforces exclusive access.  Multiple
@@ -41,28 +43,40 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class ReadWriteUpdateLock {
 
-    /** Lock shared by the read and write locks */
+    /**
+     * Lock shared by the read and write locks
+     */
     private final ReentrantReadWriteLock sharedLock = new ReentrantReadWriteLock();
 
-    /** Lock used by the update lock */
+    /**
+     * Lock used by the update lock
+     */
     private final ReentrantLock mutexLock = new ReentrantLock();
 
-    /** Lock counts */
+    /**
+     * Lock counts
+     */
     private final ThreadLocal<LockCount> lockCount = ThreadLocal.withInitial(LockCount::new);
 
-    /** Read lock */
+    /**
+     * Read lock
+     */
     private final ReadLock readLock = new ReadLock();
 
-    /** Update lock */
+    /**
+     * Update lock
+     */
     private final UpdateLock updateLock = new UpdateLock();
 
-    /** Write lock */
+    /**
+     * Write lock
+     */
     private final WriteLock writeLock = new WriteLock();
 
     /**
      * Return the read lock
      *
-     * @return                      Read lock
+     * @return Read lock
      */
     public Lock readLock() {
         return readLock;
@@ -71,7 +85,7 @@ public class ReadWriteUpdateLock {
     /**
      * Return the update lock
      *
-     * @return                      Update lock
+     * @return Update lock
      */
     public Lock updateLock() {
         return updateLock;
@@ -80,7 +94,7 @@ public class ReadWriteUpdateLock {
     /**
      * Return the write lock
      *
-     * @return                      Write lock
+     * @return Write lock
      */
     public Lock writeLock() {
         return writeLock;
@@ -104,7 +118,7 @@ public class ReadWriteUpdateLock {
         /**
          * Check if the thread holds the lock
          *
-         * @return                  TRUE if the thread holds the lock
+         * @return TRUE if the thread holds the lock
          */
         boolean hasLock();
     }
@@ -135,7 +149,7 @@ public class ReadWriteUpdateLock {
         /**
          * Check if the thread holds the lock
          *
-         * @return                  TRUE if the thread holds the lock
+         * @return TRUE if the thread holds the lock
          */
         @Override
         public boolean hasLock() {
@@ -150,7 +164,7 @@ public class ReadWriteUpdateLock {
 
         /**
          * Obtain the lock
-         *
+         * <p>
          * Caller must not hold the read or write lock
          */
         @Override
@@ -178,7 +192,7 @@ public class ReadWriteUpdateLock {
         /**
          * Check if the thread holds the lock
          *
-         * @return                  TRUE if the thread holds the lock
+         * @return TRUE if the thread holds the lock
          */
         @Override
         public boolean hasLock() {
@@ -193,7 +207,7 @@ public class ReadWriteUpdateLock {
 
         /**
          * Obtain the lock
-         *
+         * <p>
          * Caller must not hold the read lock
          */
         @Override
@@ -233,7 +247,7 @@ public class ReadWriteUpdateLock {
         /**
          * Check if the thread holds the lock
          *
-         * @return                  TRUE if the thread holds the lock
+         * @return TRUE if the thread holds the lock
          */
         @Override
         public boolean hasLock() {
@@ -246,13 +260,19 @@ public class ReadWriteUpdateLock {
      */
     private class LockCount {
 
-        /** Read lock count */
+        /**
+         * Read lock count
+         */
         private int readCount;
 
-        /** Update lock count */
+        /**
+         * Update lock count
+         */
         private int updateCount;
 
-        /** Write lock count */
+        /**
+         * Write lock count
+         */
         private int writeCount;
     }
 }

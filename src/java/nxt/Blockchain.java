@@ -13,7 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
+//Kiwi：区块链表/缓存的CRUD
 package nxt;
 
 import nxt.db.DbIterator;
@@ -25,6 +25,7 @@ import java.util.List;
 
 public interface Blockchain {
 
+    //region 读锁与更新锁
     void readLock();
 
     void readUnlock();
@@ -32,19 +33,23 @@ public interface Blockchain {
     void updateLock();
 
     void updateUnlock();
+    //endregion
 
+    //region 获得区块
+    //获得最近的区块
     Block getLastBlock();
-
+    //根据时间获得最近区块
     Block getLastBlock(int timestamp);
-
-    int getHeight();
-
-    int getLastBlockTimestamp();
-
+    //根据id获得区块
     Block getBlock(long blockId);
-
+    //根据高度获得区块
     Block getBlockAtHeight(int height);
-
+    //endregion
+    //获得区块高度
+    int getHeight();
+    //最新区块的时间戳
+    int getLastBlockTimestamp();
+    //存在区块
     boolean hasBlock(long blockId);
 
     DbIterator<? extends Block> getAllBlocks();

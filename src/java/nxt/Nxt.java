@@ -68,7 +68,7 @@ public final class Nxt {
     private static final Properties defaultProperties = new Properties();
 
     static {
-        System.setProperty("nxt.runtime.mode","desktop");
+        System.setProperty("nxt.runtime.mode", "desktop");
         redirectSystemStreams("out");
         redirectSystemStreams("err");
         System.out.println("Initializing Nxt server version " + Nxt.VERSION);
@@ -152,7 +152,7 @@ public final class Nxt {
                         System.out.printf("Creating dir %s\n", homeDir);
                         try {
                             Files.createDirectory(Paths.get(homeDir));
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             if (!(e instanceof NoSuchFileException)) {
                                 throw e;
                             }
@@ -180,7 +180,7 @@ public final class Nxt {
                     throw new IllegalArgumentException("Error loading " + propertiesFile, e);
                 }
             }
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace(); // make sure we log this exception
             throw e;
         }
@@ -199,6 +199,7 @@ public final class Nxt {
             System.out.println("Cannot read input arguments " + e.getMessage());
         }
     }
+    //region 获得配置属性的方法
 
     public static int getIntProperty(String name) {
         return getIntProperty(name, 0);
@@ -229,7 +230,7 @@ public final class Nxt {
 
     public static String getStringProperty(String name, String defaultValue, boolean doNotLog, String encoding) {
         String value = properties.getProperty(name);
-        if (value != null && ! "".equals(value)) {
+        if (value != null && !"".equals(value)) {
             Logger.logMessage(name + " = \"" + (doNotLog ? "{not logged}" : value) + "\"");
         } else {
             Logger.logMessage(name + " not defined");
@@ -276,6 +277,7 @@ public final class Nxt {
         Logger.logMessage(name + " not defined, using default " + defaultValue);
         return defaultValue;
     }
+    //endregion
 
     public static Blockchain getBlockchain() {
         return BlockchainImpl.getInstance();
@@ -290,7 +292,7 @@ public final class Nxt {
     }
 
     public static Transaction.Builder newTransactionBuilder(byte[] senderPublicKey, long amountNQT, long feeNQT, short deadline, Attachment attachment) {
-        return new TransactionImpl.BuilderImpl((byte)1, senderPublicKey, amountNQT, feeNQT, deadline, (Attachment.AbstractAttachment)attachment);
+        return new TransactionImpl.BuilderImpl((byte) 1, senderPublicKey, amountNQT, feeNQT, deadline, (Attachment.AbstractAttachment) attachment);
     }
 
     public static Transaction.Builder newTransactionBuilder(byte[] transactionBytes) throws NxtException.NotValidException {
@@ -327,6 +329,7 @@ public final class Nxt {
     static void setTime(Time time) {
         Nxt.time = time;
     }
+
     //Kiwi：入口
     public static void main(String[] args) {
         try {
@@ -365,6 +368,7 @@ public final class Nxt {
     private static class Init {
 
         private static volatile boolean initialized = false;
+
         //随着类的加载而加载，只执行一次,并优先于主函数。
         static {
             try {
@@ -423,7 +427,8 @@ public final class Nxt {
                 }
                 try {
                     secureRandomInitThread.join(10000);
-                } catch (InterruptedException ignore) {}
+                } catch (InterruptedException ignore) {
+                }
                 testSecureRandom();
                 long currentTime = System.currentTimeMillis();
                 Logger.logMessage("Initialization took " + (currentTime - startTime) / 1000 + " seconds");
@@ -456,27 +461,28 @@ public final class Nxt {
             initialized = true;
         }
 
-        private Init() {} // never
+        private Init() {
+        } // never
 
     }
 
     private static void setSystemProperties() {
-      // Override system settings that the user has define in nxt.properties file.
-      String[] systemProperties = new String[] {
-        "socksProxyHost",
-        "socksProxyPort",
-      };
+        // Override system settings that the user has define in nxt.properties file.
+        String[] systemProperties = new String[]{
+                "socksProxyHost",
+                "socksProxyPort",
+        };
 
-      for (String propertyName : systemProperties) {
-        String propertyValue;
-        if ((propertyValue = getStringProperty(propertyName)) != null) {
-          System.setProperty(propertyName, propertyValue);
+        for (String propertyName : systemProperties) {
+            String propertyValue;
+            if ((propertyValue = getStringProperty(propertyName)) != null) {
+                System.setProperty(propertyName, propertyValue);
+            }
         }
-      }
     }
 
     private static void logSystemProperties() {
-        String[] loggedProperties = new String[] {
+        String[] loggedProperties = new String[]{
                 "java.version",
                 "java.vm.version",
                 "java.vm.name",
@@ -519,7 +525,8 @@ public final class Nxt {
                 throw new RuntimeException("SecureRandom implementation too slow!!! " +
                         "Install haveged if on linux, or set nxt.useStrongSecureRandom=false.");
             }
-        } catch (InterruptedException ignore) {}
+        } catch (InterruptedException ignore) {
+        }
     }
 
     public static String getProcessId() {
@@ -562,6 +569,7 @@ public final class Nxt {
         runtimeMode.launchDesktopApplication();
     }
 
-    private Nxt() {} // never
+    private Nxt() {
+    } // never
 
 }

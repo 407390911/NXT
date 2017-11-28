@@ -13,7 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
+//Kiwi：区块链的核心处理逻辑
 package nxt;
 
 import nxt.db.DerivedDbTable;
