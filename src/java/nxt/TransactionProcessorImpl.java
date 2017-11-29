@@ -184,7 +184,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
     //未确认交易副本集
     private final Map<TransactionType, Map<String, Integer>> unconfirmedDuplicates = new HashMap<>();
 
-    //删除未确认交易的线程
+    //删除未确认的交易-线程
     private final Runnable removeUnconfirmedTransactionsThread = () -> {
 
         try {
@@ -248,7 +248,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
                 }
 
                 if (transactionList.size() > 0) {
-                    Peers.sendToSomePeers(transactionList);
+                    Peers.sendToSomePeers(transactionList);//发送出去
                 }
 
             } catch (Exception e) {
@@ -260,7 +260,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
             System.exit(1);
         }
     };
-    //处理交易线程
+    //处理交易线程（发送交易）
     private final Runnable processTransactionsThread = () -> {
         try {
             try {
@@ -301,7 +301,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         }
 
     };
-    //处理等待交易线程
+    //处理等待交易线程（等待交易进度）
     private final Runnable processWaitingTransactionsThread = () -> {
 
         try {

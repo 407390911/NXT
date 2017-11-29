@@ -146,7 +146,7 @@ public final class Generator implements Comparable<Generator> {
     public static boolean removeListener(Listener<Generator> listener, Event eventType) {
         return listeners.removeListener(listener, eventType);
     }
-
+    //开始锻造
     public static Generator startForging(String secretPhrase) {
         if (generators.size() >= MAX_FORGERS) {
             throw new RuntimeException("Cannot forge with more than " + MAX_FORGERS + " accounts on the same node");
@@ -161,7 +161,7 @@ public final class Generator implements Comparable<Generator> {
         Logger.logDebugMessage(generator + " started");
         return generator;
     }
-
+    //停止锻造
     public static Generator stopForging(String secretPhrase) {
         Generator generator = generators.remove(secretPhrase);
         if (generator != null) {
@@ -250,7 +250,7 @@ public final class Generator implements Comparable<Generator> {
     static boolean allowsFakeForging(byte[] publicKey) {
         return Constants.isTestnet && publicKey != null && Arrays.equals(publicKey, fakeForgingPublicKey);
     }
-
+    //得到hit值
     static BigInteger getHit(byte[] publicKey, Block block) {
         if (allowsFakeForging(publicKey)) {
             return BigInteger.ZERO;

@@ -262,7 +262,7 @@ final class TransactionImpl implements Transaction {
     private volatile DbKey dbKey;
     private volatile byte[] bytes = null;
 
-
+    /*交易签名生成*/
     private TransactionImpl(BuilderImpl builder, String secretPhrase) throws NxtException.NotValidException {
 
         this.timestamp = builder.timestamp;
@@ -333,7 +333,7 @@ final class TransactionImpl implements Transaction {
             if (getSenderPublicKey() != null && !Arrays.equals(senderPublicKey, Crypto.getPublicKey(secretPhrase))) {
                 throw new NxtException.NotValidException("Secret phrase doesn't match transaction sender public key");
             }
-            signature = Crypto.sign(bytes(), secretPhrase);
+            signature = Crypto.sign(bytes(), secretPhrase);//签名生成
             bytes = null;
         } else {
             signature = null;
@@ -615,17 +615,17 @@ final class TransactionImpl implements Transaction {
     byte[] bytes() {
         if (bytes == null) {
             try {
-                ByteBuffer buffer = ByteBuffer.allocate(getSize());
-                buffer.order(ByteOrder.LITTLE_ENDIAN);
+                ByteBuffer buffer = ByteBuffer.allocate(getSize()); //创建一个容量为256字节的ByteBuffer(缓冲区)
+                buffer.order(ByteOrder.LITTLE_ENDIAN); //order:修改此缓冲区的字节顺序。    ()表示 little-endian 字节顺序的常量。按照此顺序，多字节值的字节顺序是从最低有效位到最高有效位的
                 buffer.put(type.getType());
                 buffer.put((byte) ((version << 4) | type.getSubtype()));
-                buffer.putInt(timestamp);
-                buffer.putShort(deadline);
-                buffer.put(getSenderPublicKey());
-                buffer.putLong(type.canHaveRecipient() ? recipientId : Genesis.CREATOR_ID);
+                buffer.putInt(timestamp); //时间戳 0
+                buffer.putShort(deadline); //交易最后期限 1
+                buffer.put(getSenderPublicKey()); //发送者公钥 3baf0eaedca809eb3d45b46ae7bd2fcf0a73641c66fccb8c3d7d102b82eb7d6d
+                buffer.putLong(type.canHaveRecipient() ? recipientId : Genesis.CREATOR_ID); //接收者id 4779131893668509580 4537754936835840880 6356891637402132580
                 if (useNQT()) {
-                    buffer.putLong(amountNQT);
-                    buffer.putLong(feeNQT);
+                    buffer.putLong(amountNQT); // 交易数额 50000000 30000000 20000000
+                    buffer.putLong(feeNQT); // 交易费用 0 0 0
                     if (referencedTransactionFullHash != null) {
                         buffer.put(referencedTransactionFullHash);
                     } else {
@@ -686,7 +686,7 @@ final class TransactionImpl implements Transaction {
             int ecBlockHeight = 0;
             long ecBlockId = 0;
             if (version > 0) {
-                flags = buffer.getInt();
+                flags = buffer.getInt(); //用于读取 int 值的相对 get 方法  读取此缓冲区的当前位置之后的 4 个字节，根据当前的字节顺序将它们组成 int 值，然后将该位置增加 4
                 ecBlockHeight = buffer.getInt();
                 ecBlockId = buffer.getLong();
             }

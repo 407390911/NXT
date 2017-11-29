@@ -196,12 +196,15 @@ final class BlockImpl implements Block {
     }
 
     @Override
-    public long getId() {
+    public long getId() {//得到区块id
         if (id == 0) {
             if (blockSignature == null) {
                 throw new IllegalStateException("Block is not signed yet");
             }
             byte[] hash = Crypto.sha256().digest(bytes());
+             //生成区块签名
+            //blockSignature = Crypto.sign(bytes(), "dim suicide shown stream beyond awaken cousin ground whatever burst second stroke");
+            //System.out.print("block_signature="+Arrays.toString(blockSignature)+"\n");
             BigInteger bigInteger = new BigInteger(1, new byte[] {hash[7], hash[6], hash[5], hash[4], hash[3], hash[2], hash[1], hash[0]});
             id = bigInteger.longValue();
             stringId = bigInteger.toString();
@@ -296,6 +299,7 @@ final class BlockImpl implements Block {
 
     byte[] bytes() {
         if (bytes == null) {
+            //blockSignature = null; //生成区块的时候置为0
             ByteBuffer buffer = ByteBuffer.allocate(4 + 4 + 8 + 4 + (version < 3 ? (4 + 4) : (8 + 8)) + 4 + 32 + 32 + (32 + 32) + (blockSignature != null ? 64 : 0));
             buffer.order(ByteOrder.LITTLE_ENDIAN);
             buffer.putInt(version);

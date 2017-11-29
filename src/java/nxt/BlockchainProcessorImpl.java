@@ -265,7 +265,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
                 System.exit(1);
             }
         }
-
+        //同步区块
         private void downloadPeer() throws InterruptedException {
             try {
                 long startTime = System.currentTimeMillis();
@@ -284,8 +284,8 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
                 if (response == null) {
                     return;
                 }
-                BigInteger curCumulativeDifficulty = blockchain.getLastBlock().getCumulativeDifficulty();
-                String peerCumulativeDifficulty = (String) response.get("cumulativeDifficulty");
+                BigInteger curCumulativeDifficulty = blockchain.getLastBlock().getCumulativeDifficulty();//最后一个区块的难度
+                String peerCumulativeDifficulty = (String) response.get("cumulativeDifficulty");//区块难度
                 if (peerCumulativeDifficulty == null) {
                     return;
                 }
@@ -521,6 +521,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
          * @param   feederPeer              Peer supplying the blocks list
          * @param   commonBlock             Common block
          * @throws  InterruptedException    Download interrupted
+         * 下载区块链
          */
         private void downloadBlockchain(final Peer feederPeer, final Block commonBlock, final int startHeight) throws InterruptedException {
             Map<Long, PeerBlock> blockMap = new HashMap<>();
@@ -687,7 +688,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
                 for (int i = myPoppedOffBlocks.size() - 1; i >= 0; i--) {
                     BlockImpl block = myPoppedOffBlocks.remove(i);
                     try {
-                        pushBlock(block);
+                        pushBlock(block);//下载同步区块
                     } catch (BlockNotAcceptedException e) {
                         Logger.logErrorMessage("Popped off block no longer acceptable: " + block.getJSONObject().toJSONString(), e);
                         break;
@@ -1065,7 +1066,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
             }
         }
     };
-
+    //扫描区块
     private BlockchainProcessorImpl() {
         final int trimFrequency = Nxt.getIntProperty("nxt.trimFrequency");
         blockListeners.addListener(block -> {
@@ -1076,7 +1077,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
                 doTrimDerivedTables();
             }
         }, Event.BLOCK_SCANNED);
-
+        //推送区块
         blockListeners.addListener(block -> {
             if (trimDerivedTables && block.getHeight() % trimFrequency == 0 && !isTrimming) {
                 isTrimming = true;
@@ -1215,28 +1216,28 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
     public int getMinRollbackHeight() {
         return trimDerivedTables ? (lastTrimHeight > 0 ? lastTrimHeight : Math.max(blockchain.getHeight() - Constants.MAX_ROLLBACK, 0)) : 0;
     }
-
+    //处理节点区块
     @Override
     public void processPeerBlock(JSONObject request) throws NxtException {
         BlockImpl block = BlockImpl.parseBlock(request);
         BlockImpl lastBlock = blockchain.getLastBlock();
         if (block.getPreviousBlockId() == lastBlock.getId()) {
-            pushBlock(block);
+            pushBlock(block);//处理节点区块
         } else if (block.getPreviousBlockId() == lastBlock.getPreviousBlockId() && block.getTimestamp() < lastBlock.getTimestamp()) {
             blockchain.writeLock();
             try {
                 if (lastBlock.getId() != blockchain.getLastBlock().getId()) {
-                    return; // blockchain changed, ignore the block
+                    return; // blockchain changed, ignore the block区块链改变，忽略这个区块
                 }
                 BlockImpl previousBlock = blockchain.getBlock(lastBlock.getPreviousBlockId());
                 lastBlock = popOffTo(previousBlock).get(0);
                 try {
-                    pushBlock(block);
+                    pushBlock(block);//处理节点区块
                     TransactionProcessorImpl.getInstance().processLater(lastBlock.getTransactions());
                     Logger.logDebugMessage("Last block " + lastBlock.getStringId() + " was replaced by " + block.getStringId());
                 } catch (BlockNotAcceptedException e) {
                     Logger.logDebugMessage("Replacement block failed to be accepted, pushing back our last block");
-                    pushBlock(lastBlock);
+                    pushBlock(lastBlock);//处理节点区块
                     TransactionProcessorImpl.getInstance().processLater(block.getTransactions());
                 }
             } finally {
@@ -1385,7 +1386,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
             throw new RuntimeException(e.toString(), e);
         }
     }
-
+    //增加区块
     private boolean addGenesisBlock() {
         if (BlockDb.hasBlock(Genesis.GENESIS_BLOCK_ID, 0)) {
             Logger.logMessage("Genesis block already in database");
@@ -1426,7 +1427,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
             throw new RuntimeException(e.toString(), e);
         }
     }
-
+    //推送区块
     private void pushBlock(final BlockImpl block) throws BlockNotAcceptedException {
 
         int curTime = Nxt.getEpochTime();
@@ -1482,7 +1483,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
         blockListeners.notify(block, Event.BLOCK_PUSHED);
 
     }
-
+    //验证分期交易
     private void validatePhasedTransactions(int height, List<TransactionImpl> validPhasedTransactions, List<TransactionImpl> invalidPhasedTransactions,
                                             Map<TransactionType, Map<String, Integer>> duplicates) {
         if (height >= Constants.PHASING_BLOCK) {
@@ -1547,7 +1548,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
             throw new BlockNotAcceptedException("Invalid block payload length " + block.getPayloadLength(), block);
         }
     }
-
+    //交易验证
     private void validateTransactions(BlockImpl block, BlockImpl previousLastBlock, int curTime, Map<TransactionType, Map<String, Integer>> duplicates,
                                       boolean fullValidation) throws BlockNotAcceptedException {
         long payloadLength = 0;
@@ -1831,7 +1832,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
             return true;
         }
     }
-
+    //为未确认的交易按价格排序
     SortedSet<UnconfirmedTransaction> selectUnconfirmedTransactions(Map<TransactionType, Map<String, Integer>> duplicates, Block previousBlock, int blockTimestamp) {
         List<UnconfirmedTransaction> orderedUnconfirmedTransactions = new ArrayList<>();
         try (FilteringIterator<UnconfirmedTransaction> unconfirmedTransactions = new FilteringIterator<>(
@@ -1880,7 +1881,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
             .comparingLong(UnconfirmedTransaction::getArrivalTimestamp)
             .thenComparingInt(UnconfirmedTransaction::getHeight)
             .thenComparingLong(UnconfirmedTransaction::getId);
-
+    //区块定义
     void generateBlock(String secretPhrase, int blockTimestamp) throws BlockNotAcceptedException {
 
         Map<TransactionType, Map<String, Integer>> duplicates = new HashMap<>();
@@ -1922,7 +1923,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
                 payloadHash, publicKey, generationSignature, previousBlockHash, blockTransactions, secretPhrase);
 
         try {
-            pushBlock(block);
+            pushBlock(block);//本机产生
             blockListeners.notify(block, Event.BLOCK_GENERATED);
             Logger.logDebugMessage("Account " + Long.toUnsignedString(block.getGeneratorId()) + " generated block " + block.getStringId()
                     + " at height " + block.getHeight() + " timestamp " + block.getTimestamp() + " fee " + ((float)block.getTotalFeeNQT())/Constants.ONE_NXT);

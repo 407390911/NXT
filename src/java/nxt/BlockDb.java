@@ -272,6 +272,7 @@ final class BlockDb {
                 pstmt.executeUpdate();
                 TransactionDb.saveTransactions(con, block.getTransactions());
             }
+            //更新前一个区块的"next_block_id"字段
             if (block.getPreviousBlockId() != 0) {
                 try (PreparedStatement pstmt = con.prepareStatement("UPDATE block SET next_block_id = ? WHERE id = ?")) {
                     pstmt.setLong(1, block.getId());
