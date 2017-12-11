@@ -26,6 +26,7 @@ import java.util.Map;
 public enum APIEnum {
     //To preserve compatibility, please add new APIs to the end of the enum.
     //When an API is deleted, set its name to empty string and handler to null.
+    APP_Language("appLanguage", AppLanguage.instance),//by ZHENG
     APPROVE_TRANSACTION("approveTransaction", ApproveTransaction.instance),
     BROADCAST_TRANSACTION("broadcastTransaction", BroadcastTransaction.instance),
     CALCULATE_FULL_HASH("calculateFullHash", CalculateFullHash.instance),
@@ -77,6 +78,7 @@ public enum APIEnum {
     GET_ACCOUNT_CURRENCY_COUNT("getAccountCurrencyCount", GetAccountCurrencyCount.instance),
     GET_ACCOUNT_ASSET_COUNT("getAccountAssetCount", GetAccountAssetCount.instance),
     GET_ACCOUNT_PROPERTIES("getAccountProperties", GetAccountProperties.instance),
+    GET_ALL_ACCOUNT("getAllAccount", GetAllAccount.instance),//by ZHENG
     SELL_ALIAS("sellAlias", SellAlias.instance),
     BUY_ALIAS("buyAlias", BuyAlias.instance),
     GET_ALIAS("getAlias", GetAlias.instance),

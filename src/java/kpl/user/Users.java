@@ -397,7 +397,7 @@ public final class Users {
                 JSONObject response = new JSONObject();
                 JSONArray addedOrphanedBlocks = new JSONArray();
                 JSONObject addedOrphanedBlock = new JSONObject();
-                addedOrphanedBlock.put("index", Users.getIndex(block));
+                addedOrphanedBlock.put("index", getIndex(block));
                 addedOrphanedBlock.put("timestamp", block.getTimestamp());
                 addedOrphanedBlock.put("numberOfTransactions", block.getTransactions().size());
                 addedOrphanedBlock.put("totalAmountNQT", block.getTotalAmountNQT());
@@ -417,7 +417,7 @@ public final class Users {
                 JSONObject response = new JSONObject();
                 JSONArray addedRecentBlocks = new JSONArray();
                 JSONObject addedRecentBlock = new JSONObject();
-                addedRecentBlock.put("index", Users.getIndex(block));
+                addedRecentBlock.put("index", getIndex(block));
                 addedRecentBlock.put("timestamp", block.getTimestamp());
                 addedRecentBlock.put("numberOfTransactions", block.getTransactions().size());
                 addedRecentBlock.put("totalAmountNQT", block.getTotalAmountNQT());

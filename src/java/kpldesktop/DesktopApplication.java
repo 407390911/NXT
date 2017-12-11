@@ -123,7 +123,8 @@ public class DesktopApplication extends Application {
         DesktopApplication.stage = stage;
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         WebView browser = new WebView();
-        browser.setOnContextMenuRequested(new WalletContextMenu());
+        //browser.setOnContextMenuRequested(new WalletContextMenu());
+        browser.setContextMenuEnabled(true);
         WebView invisible = new WebView();
 
         int height = (int) Math.min(primaryScreenBounds.getMaxY() - 100, 1000);
@@ -132,6 +133,7 @@ public class DesktopApplication extends Application {
         browser.setMinWidth(width);
         webEngine = browser.getEngine();
         webEngine.setUserDataDirectory(Kpl.getConfDir());
+        webEngine.getOnAlert();
 
         Worker<Void> loadWorker = webEngine.getLoadWorker();
         loadWorker.stateProperty().addListener(
@@ -148,7 +150,7 @@ public class DesktopApplication extends Application {
                     String language = locale.getLanguage().toLowerCase() + "-" + locale.getCountry().toUpperCase();
                     window.setMember("javaFxLanguage", language);
                     webEngine.executeScript("console.log = function(msg) { java.log(msg); };");
-                    stage.setTitle("KPL Desktop - " + webEngine.getLocation());
+                    //stage.setTitle("KPL Desktop - " + webEngine.getLocation());
                     krs = (JSObject) webEngine.executeScript("KRS");
                     updateClientState("Desktop Wallet started");
                     BlockchainProcessor blockchainProcessor = Kpl.getBlockchainProcessor();
@@ -191,6 +193,7 @@ public class DesktopApplication extends Application {
 
         Scene scene = new Scene(browser);
         String address = API.getServerRootUri().toString();
+        stage.setTitle("kpl");
         stage.getIcons().add(new Image(address + "/img/kpl-icon-32x32.png"));
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(scene);

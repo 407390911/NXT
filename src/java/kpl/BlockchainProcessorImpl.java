@@ -1789,7 +1789,7 @@ final class BlockchainProcessorImpl implements BlockchainProcessor {
     }
 
     private int getTransactionVersion(int previousBlockHeight) {
-        return previousBlockHeight < Constants.DIGITAL_GOODS_STORE_BLOCK ? 0 : 1;
+        return previousBlockHeight < -1 ? 0 : 1;//Constants.DIGITAL_GOODS_STORE_BLOCK ? 0 : 1;
     }
 
     private boolean verifyChecksum(byte[] validChecksum, int fromHeight, int toHeight) {

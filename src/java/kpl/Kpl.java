@@ -430,8 +430,7 @@ public final class Kpl {
                 Logger.logMessage("Initialization took " + (currentTime - startTime) / 1000 + " seconds");
                 Logger.logMessage("Kpl server " + VERSION + " started successfully.");
                 Logger.logMessage("Copyright © 2013-2016 The Kpl Core Developers.");
-                Logger.logMessage("Copyright © 2016-2017 Jelurida IP B.V.");
-                Logger.logMessage("Distributed under the Jelurida Public License version 1.0 for the Kpl Public Blockchain Platform, with ABSOLUTELY NO WARRANTY.");
+                Logger.logMessage("Distributed under GPLv2, with ABSOLUTELY NO WARRANTY.");
                 if (API.getWelcomePageUri() != null) {
                     Logger.logMessage("Client UI is at " + API.getWelcomePageUri());
                 }

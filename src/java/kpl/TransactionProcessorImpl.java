@@ -607,7 +607,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
     }
 
     private void processPeerTransactions(JSONArray transactionsData) throws KplException.NotValidException {
-        if (Kpl.getBlockchain().getHeight() <= Constants.LAST_KNOWN_BLOCK && !testUnconfirmedTransactions) {
+        if (Kpl.getBlockchain().getHeight() <= -1 && !testUnconfirmedTransactions) {//Constants.LAST_KNOWN_BLOCK && !testUnconfirmedTransactions) {
             return;
         }
         if (transactionsData == null || transactionsData.isEmpty()) {
@@ -671,7 +671,7 @@ final class TransactionProcessorImpl implements TransactionProcessor {
         try {
             try {
                 Db.db.beginTransaction();
-                if (Kpl.getBlockchain().getHeight() <= Constants.LAST_KNOWN_BLOCK && !testUnconfirmedTransactions) {
+                if (Kpl.getBlockchain().getHeight() <= -1 && !testUnconfirmedTransactions) {//Constants.LAST_KNOWN_BLOCK && !testUnconfirmedTransactions) {
                     throw new KplException.NotCurrentlyValidException("Blockchain not ready to accept transactions");
                 }
 

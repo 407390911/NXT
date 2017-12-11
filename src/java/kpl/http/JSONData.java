@@ -151,6 +151,18 @@ public final class JSONData {
         return json;
     }
 
+    static JSONObject account(Account account) {
+        JSONObject json = new JSONObject();
+        json.put("id", account.getAccountId());
+        json.put("balance", account.getBalance());
+        json.put("unconfirmed_balance", account.getUnconfirmedUnits());
+        json.put("forged_blance", account.getForgedBlance());
+        json.put("active_lessee_id", account.getActiveLesseeID());
+        json.put("height", account.getHeight());
+        json.put("latest", account.getLatest());
+        return json;
+    }
+
     static JSONObject currency(Currency currency, boolean includeCounts) {
         JSONObject json = new JSONObject();
         json.put("currency", Long.toUnsignedString(currency.getId()));
@@ -273,7 +285,7 @@ public final class JSONData {
 
     private static JSONObject expectedOrder(Transaction transaction) {
         JSONObject json = new JSONObject();
-        Attachment.ColoredCoinsOrderPlacement attachment = (Attachment.ColoredCoinsOrderPlacement)transaction.getAttachment();
+        Attachment.ColoredCoinsOrderPlacement attachment = (Attachment.ColoredCoinsOrderPlacement) transaction.getAttachment();
         json.put("order", transaction.getStringId());
         json.put("asset", Long.toUnsignedString(attachment.getAssetId()));
         putAccount(json, "account", transaction.getSenderId());
@@ -285,7 +297,7 @@ public final class JSONData {
 
     static JSONObject expectedOrderCancellation(Transaction transaction) {
         JSONObject json = new JSONObject();
-        Attachment.ColoredCoinsOrderCancellation attachment = (Attachment.ColoredCoinsOrderCancellation)transaction.getAttachment();
+        Attachment.ColoredCoinsOrderCancellation attachment = (Attachment.ColoredCoinsOrderCancellation) transaction.getAttachment();
         json.put("order", Long.toUnsignedString(attachment.getOrderId()));
         putAccount(json, "account", transaction.getSenderId());
         putExpectedTransaction(json, transaction);
@@ -307,7 +319,7 @@ public final class JSONData {
 
     static JSONObject expectedBuyOffer(Transaction transaction) {
         JSONObject json = expectedOffer(transaction);
-        Attachment.MonetarySystemPublishExchangeOffer attachment = (Attachment.MonetarySystemPublishExchangeOffer)transaction.getAttachment();
+        Attachment.MonetarySystemPublishExchangeOffer attachment = (Attachment.MonetarySystemPublishExchangeOffer) transaction.getAttachment();
         json.put("rateNQT", String.valueOf(attachment.getBuyRateNQT()));
         json.put("limit", String.valueOf(attachment.getTotalBuyLimit()));
         json.put("supply", String.valueOf(attachment.getInitialBuySupply()));
@@ -316,7 +328,7 @@ public final class JSONData {
 
     static JSONObject expectedSellOffer(Transaction transaction) {
         JSONObject json = expectedOffer(transaction);
-        Attachment.MonetarySystemPublishExchangeOffer attachment = (Attachment.MonetarySystemPublishExchangeOffer)transaction.getAttachment();
+        Attachment.MonetarySystemPublishExchangeOffer attachment = (Attachment.MonetarySystemPublishExchangeOffer) transaction.getAttachment();
         json.put("rateNQT", String.valueOf(attachment.getSellRateNQT()));
         json.put("limit", String.valueOf(attachment.getTotalSellLimit()));
         json.put("supply", String.valueOf(attachment.getInitialSellSupply()));
@@ -324,7 +336,7 @@ public final class JSONData {
     }
 
     private static JSONObject expectedOffer(Transaction transaction) {
-        Attachment.MonetarySystemPublishExchangeOffer attachment = (Attachment.MonetarySystemPublishExchangeOffer)transaction.getAttachment();
+        Attachment.MonetarySystemPublishExchangeOffer attachment = (Attachment.MonetarySystemPublishExchangeOffer) transaction.getAttachment();
         JSONObject json = new JSONObject();
         json.put("offer", transaction.getStringId());
         putAccount(json, "account", transaction.getSenderId());
@@ -579,7 +591,7 @@ public final class JSONData {
         json.put("poll", Long.toUnsignedString(poll.getId()));
         if (voteWeighting.getMinBalanceModel() == VoteWeighting.MinBalanceModel.ASSET) {
             json.put("decimals", Asset.getAsset(voteWeighting.getHoldingId()).getDecimals());
-        } else if(voteWeighting.getMinBalanceModel() == VoteWeighting.MinBalanceModel.CURRENCY) {
+        } else if (voteWeighting.getMinBalanceModel() == VoteWeighting.MinBalanceModel.CURRENCY) {
             Currency currency = Currency.getCurrency(voteWeighting.getHoldingId());
             if (currency != null) {
                 json.put("decimals", currency.getDecimals());
@@ -614,6 +626,7 @@ public final class JSONData {
     interface VoteWeighter {
         long calcWeight(long voterId);
     }
+
     static JSONObject vote(Vote vote, VoteWeighter weighter) {
         JSONObject json = new JSONObject();
         putAccount(json, "voter", vote.getVoterId());
@@ -799,7 +812,7 @@ public final class JSONData {
 
     static JSONObject expectedAssetTransfer(Transaction transaction, boolean includeAssetInfo) {
         JSONObject json = new JSONObject();
-        Attachment.ColoredCoinsAssetTransfer attachment = (Attachment.ColoredCoinsAssetTransfer)transaction.getAttachment();
+        Attachment.ColoredCoinsAssetTransfer attachment = (Attachment.ColoredCoinsAssetTransfer) transaction.getAttachment();
         json.put("assetTransfer", transaction.getStringId());
         json.put("asset", Long.toUnsignedString(attachment.getAssetId()));
         putAccount(json, "sender", transaction.getSenderId());
@@ -828,7 +841,7 @@ public final class JSONData {
 
     static JSONObject expectedAssetDelete(Transaction transaction, boolean includeAssetInfo) {
         JSONObject json = new JSONObject();
-        Attachment.ColoredCoinsAssetDelete attachment = (Attachment.ColoredCoinsAssetDelete)transaction.getAttachment();
+        Attachment.ColoredCoinsAssetDelete attachment = (Attachment.ColoredCoinsAssetDelete) transaction.getAttachment();
         json.put("assetDelete", transaction.getStringId());
         json.put("asset", Long.toUnsignedString(attachment.getAssetId()));
         putAccount(json, "account", transaction.getSenderId());
@@ -870,7 +883,7 @@ public final class JSONData {
 
     static JSONObject expectedCurrencyTransfer(Transaction transaction, boolean includeCurrencyInfo) {
         JSONObject json = new JSONObject();
-        Attachment.MonetarySystemCurrencyTransfer attachment = (Attachment.MonetarySystemCurrencyTransfer)transaction.getAttachment();
+        Attachment.MonetarySystemCurrencyTransfer attachment = (Attachment.MonetarySystemCurrencyTransfer) transaction.getAttachment();
         json.put("transfer", transaction.getStringId());
         json.put("currency", Long.toUnsignedString(attachment.getCurrencyId()));
         putAccount(json, "sender", transaction.getSenderId());
@@ -919,7 +932,7 @@ public final class JSONData {
         JSONObject json = new JSONObject();
         json.put("transaction", transaction.getStringId());
         json.put("subtype", transaction.getType().getSubtype());
-        Attachment.MonetarySystemExchange attachment = (Attachment.MonetarySystemExchange)transaction.getAttachment();
+        Attachment.MonetarySystemExchange attachment = (Attachment.MonetarySystemExchange) transaction.getAttachment();
         json.put("units", String.valueOf(attachment.getUnits()));
         json.put("rateNQT", String.valueOf(attachment.getRateNQT()));
         if (includeCurrencyInfo) {
@@ -967,7 +980,7 @@ public final class JSONData {
                 attachmentJSON.putAll(appendage.getJSONObject());
             }
         }
-        if (! attachmentJSON.isEmpty()) {
+        if (!attachmentJSON.isEmpty()) {
             for (Map.Entry entry : (Iterable<Map.Entry>) attachmentJSON.entrySet()) {
                 if (entry.getValue() instanceof Long) {
                     entry.setValue(String.valueOf(entry.getValue()));
@@ -1109,7 +1122,7 @@ public final class JSONData {
         json.put("transactionTimestamp", taggedData.getTransactionTimestamp());
         json.put("blockTimestamp", taggedData.getBlockTimestamp());
         return json;
-	}
+    }
 
     static JSONObject dataTag(TaggedData.Tag tag) {
         JSONObject json = new JSONObject();
@@ -1223,6 +1236,7 @@ public final class JSONData {
         }
     }
 
-    private JSONData() {} // never
+    private JSONData() {
+    } // never
 
 }
