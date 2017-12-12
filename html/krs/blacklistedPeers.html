@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright © 2013-2016 The Nxt Core Developers.                            ~
+  ~ Copyright © 2013-2016 The Kpl Core Developers.                            ~
   ~ Copyright © 2016-2017 Jelurida IP B.V.                                    ~
   ~                                                                           ~
   ~ See the LICENSE.txt file at the top-level directory of this distribution  ~
   ~ for licensing information.                                                ~
   ~                                                                           ~
   ~ Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,
-  ~ no part of the Nxt software, including this file, may be copied, modified,~
+  ~ no part of the Kpl software, including this file, may be copied, modified,~
   ~ propagated, or distributed except according to the terms contained in the ~
   ~ LICENSE.txt file.                                                         ~
   ~                                                                           ~
@@ -63,11 +63,11 @@
                 element.textContent = peer.software;
                 element = row.insertCell(5);
                 element.className = "remove";
-                element.title = "Remove completely";
+                element.title = "Remove blacklisted status";
                 element.onclick = function() {
                     requestPeerRemoving(peer.index);
                 };
-                element = parent.document.getElementById("knownPeersCounter");
+                element = parent.document.getElementById("blacklistedPeersCounter");
                 element.innerHTML = parseInt(element.innerHTML) + 1;
             }
 
@@ -78,9 +78,9 @@
                 }
             }
 
-            function removePeer(peer) {if (document.getElementById("peer" + peer.index)==null)return;
+            function removePeer(peer) {
                 document.getElementById("peers").deleteRow(document.getElementById("peer" + peer.index).rowIndex);
-                var element = parent.document.getElementById("knownPeersCounter");
+                var element = parent.document.getElementById("blacklistedPeersCounter");
                 element.innerHTML = parseInt(element.innerHTML) - 1;
             }
 
@@ -92,7 +92,7 @@
             }
 
             function requestPeerRemoving(index) {
-                parent.sendRequest("removeKnownPeer&peer=" + index);
+                parent.sendRequest("removeBlacklistedPeer&peer=" + index);
             }
         </script>
     </head>
