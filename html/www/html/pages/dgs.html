@@ -1,12 +1,12 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright © 2013-2016 The Nxt Core Developers.                            ~
+  ~ Copyright © 2013-2016 The Kpl Core Developers.                            ~
   ~ Copyright © 2016-2017 Jelurida IP B.V.                                    ~
   ~                                                                           ~
   ~ See the LICENSE.txt file at the top-level directory of this distribution  ~
   ~ for licensing information.                                                ~
   ~                                                                           ~
   ~ Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,
-  ~ no part of the Nxt software, including this file, may be copied, modified,~
+  ~ no part of the Kpl software, including this file, may be copied, modified,~
   ~ propagated, or distributed except according to the terms contained in the ~
   ~ LICENSE.txt file.                                                         ~
   ~                                                                           ~
@@ -49,52 +49,33 @@
 
     <section class="content">
         <div  id="dgs_search_center" class="row">
-            <div class="row">
-                <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                        <div class="inner">
-                            <h3><span id="dgs_user_purchase_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
-                            <p><span data-i18n="purchased_products">Purchased Products</span></p>
+            <table width="100%" style="background:none;">
+                <tr>
+                    <td>
+                        <h1><span id="dgs_user_purchase_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
+                        <p><span data-i18n="purchased_products">Purchased Products</span></p>
+                        <div>
+                            <a href="#" class="small-box-footer dgs_my_purchases_link"><span data-i18n="my_purchases">My Purchases</span> <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
-                        <div class="icon"><i class="ion ion-images"></i></div>
-                        <a href="#" class="small-box-footer dgs_my_purchases_link"><span data-i18n="my_purchases">My Purchases</span> <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-green">
-                        <div class="inner">
-                            <h3><span id="dgs_product_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
-                            <p><span data-i18n="products_available">Products available</span></p>
-                        </div>
-                        <div class="icon"><i class="fa fa-cubes"></i></div>
-                        <span class="small-box-footer">&nbsp;</span>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-yellow">
-                        <div class="inner">
-                            <h3><span id="dgs_total_purchase_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
-                            <p data-i18n="total_purchases">Total Purchases</p>
-                        </div>
-                        <div class="icon"><i class="fa fa-truck"></i></div>
-                        <span class="small-box-footer">&nbsp;</span>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-yellow">
-                        <div class="inner">
-                            <h3><span id="dgs_tag_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
-                            <p data-i18n="total_tags">Total Tags</p>
-                        </div>
-                        <div class="icon"><i class="fa fa-tags"></i></div>
-                        <span class="small-box-footer">&nbsp;</span>
-                    </div>
-                </div>
-            </div>
+                    </td>
+                    <td>
+                        <h1><span id="dgs_product_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
+                        <p><span data-i18n="products_available">Products available</span></p>
+                    </td>
+                    <td>
+                        <h1><span id="dgs_total_purchase_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
+                        <p data-i18n="total_purchases">Total Purchases</p>
+                    </td>
+                    <td>
+                        <h1><span id="dgs_tag_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
+                        <p data-i18n="total_tags">Total Tags</p>
+                    </td>
+                </tr>
+            </table>
 
             <div class="row" style="text-align:center">
                 <div class="col-xs-12 col-sm-6">
-                    <div style=";padding:12px;background-color:#fff;border:1px solid #f2f2f2;">
+                    <div style=";padding:20px;">
                         <p style="text-align:center;font-size:16px;" data-i18n="dgs_search_description">Enter the seller's Account ID below to view their store.</p>
                         <form action="#" method="get" class="dgs_search sidebar-form" style="width:300px;margin:0 auto;" autocomplete="off">
                             <div class="input-group">
@@ -107,7 +88,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6">
-                    <div style="padding:12px;background-color:#fff;border:1px solid #f2f2f2;">
+                    <div style="padding:20px;">
                         <p style="text-align:center;font-size:16px;" data-i18n="dgs_fulltext_search_description">Search for a product.</p>
                         <form action="#" method="get" class="dgs_fulltext_search sidebar-form" style="width:300px;margin:0 auto;" autocomplete="off">
                             <div class="input-group">

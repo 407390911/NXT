@@ -1,12 +1,12 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright © 2013-2016 The Nxt Core Developers.                            ~
+  ~ Copyright © 2013-2016 The Kpl Core Developers.                            ~
   ~ Copyright © 2016-2017 Jelurida IP B.V.                                    ~
   ~                                                                           ~
   ~ See the LICENSE.txt file at the top-level directory of this distribution  ~
   ~ for licensing information.                                                ~
   ~                                                                           ~
   ~ Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,
-  ~ no part of the Nxt software, including this file, may be copied, modified,~
+  ~ no part of the Kpl software, including this file, may be copied, modified,~
   ~ propagated, or distributed except according to the terms contained in the ~
   ~ LICENSE.txt file.                                                         ~
   ~                                                                           ~
@@ -22,47 +22,27 @@
         </div>
     </section>
     <section class="content">
-        <div class="row">
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-aqua">
-                    <div class="inner inner-smaller">
-                        <h3><span id="peers_uploaded_volume" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
+        <div class="box box-primary">
+            <table width="100%" style="background:none;">
+                <tr>
+                    <td>
+                        <h1><span id="peers_uploaded_volume" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
                         <p data-i18n="uploaded_volume">Uploaded Volume</p>
-                    </div>
-                    <div class="icon-smaller"><i class="fa fa-upload"></i></div>
-                    <div class="small-box-footer"></div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-green">
-                    <div class="inner inner-smaller">
-                        <h3><span id="peers_downloaded_volume" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
+                    </td>
+                    <td>
+                        <h1><span id="peers_downloaded_volume" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
                         <p data-i18n="downloaded_volume">Downloaded Volume</p>
-                    </div>
-                    <div class="icon-smaller" style="bottom:-12px"><i class="fa fa-download"></i></div>
-                    <div class="small-box-footer"></div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-yellow">
-                    <div class="inner inner-smaller">
-                        <h3><span id="peers_connected" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
+                    </td>
+                    <td>
+                        <h1><span id="peers_connected" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
                         <p data-i18n="connected_peers">Connected Peers</p>
-                    </div>
-                    <div class="icon-smaller" style="bottom:-12px"><i class="fa fa-cloud"></i></div>
-                    <div class="small-box-footer"></div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-red">
-                    <div class="inner inner-smaller">
-                        <h3><span id="peers_up_to_date" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
+                    </td>
+                    <td>
+                        <h1><span id="peers_up_to_date" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
                         <p data-i18n="up_to_date_peers">Up-to-date Peers</p>
-                    </div>
-                    <div class="icon-smaller"><i class="ion ion-pie-graph"></i></div>
-                    <div class="small-box-footer"></div>
-                </div>
-            </div>
+                    </td>
+                </tr>
+            </table>
         </div>
        
         <div class="data-container data-loading">

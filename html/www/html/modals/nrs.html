@@ -1,12 +1,12 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright © 2013-2016 The Nxt Core Developers.                            ~
+  ~ Copyright © 2013-2016 The Kpl Core Developers.                            ~
   ~ Copyright © 2016-2017 Jelurida IP B.V.                                    ~
   ~                                                                           ~
   ~ See the LICENSE.txt file at the top-level directory of this distribution  ~
   ~ for licensing information.                                                ~
   ~                                                                           ~
   ~ Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,
-  ~ no part of the Nxt software, including this file, may be copied, modified,~
+  ~ no part of the Kpl software, including this file, may be copied, modified,~
   ~ propagated, or distributed except according to the terms contained in the ~
   ~ LICENSE.txt file.                                                         ~
   ~                                                                           ~
@@ -19,7 +19,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" data-i18n="send_nxt">Send NXT</h4>
+                <h4 class="modal-title" data-i18n="send_kpl">Send KPL</h4>
             </div>
             <div class="modal-body">
                 <form role="form" autocomplete="off">
@@ -30,8 +30,8 @@
                             <div class="form-group">
                                 <label for="send_money_amount" data-i18n="amount">AMOUNT</label>
                                 <div class="input-group">
-                                    <input type="text" name="amountNXT" id="send_money_amount" step="any" min="0" class="form-control" placeholder="Amount" data-i18n="[placeholder]amount" tabindex="3">
-                                    <span class="input-group-addon">NXT</span>
+                                    <input type="text" name="amountKPL" id="send_money_amount" step="any" min="0" class="form-control" placeholder="Amount" data-i18n="[placeholder]amount" tabindex="3">
+                                    <span class="input-group-addon">KPL</span>
                                 </div>
                             </div>
                         </div>
@@ -55,210 +55,210 @@
                 <div class="advanced_info"><a href="#" data-i18n="advanced">advanced</a></div>
 
                 <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="cancel">Cancel</button>
-                <button type="button" class="btn btn-primary" data-loading-text="Submitting..." data-i18n="send_nxt;[data-loading-text]submitting">Send NXT</button>
+                <button type="button" class="btn btn-primary" data-loading-text="Submitting..." data-i18n="send_kpl;[data-loading-text]submitting">Send KPL</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="nrs_modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="krs_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-wide">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" data-i18n="nrs_info">NRS Info</h4>
+                <h4 class="modal-title" data-i18n="krs_info">KRS Info</h4>
             </div>
             <div class="modal-body">
                 <ul class="nav nav-pills nav-justified" style="margin-bottom:10px">
-                    <li class="active" id="nrs_modal_state_nav" data-tab="state"><a href="#" data-i18n="nrs_state">NRS State</a></li>
-                    <li data-tab="update"><a href="#" data-i18n="nrs_update">NRS Update</a></li>
+                    <li class="active" id="krs_modal_state_nav" data-tab="state"><a href="#" data-i18n="krs_state">KRS State</a></li>
+                    <li data-tab="update"><a href="#" data-i18n="krs_update">KRS Update</a></li>
                 </ul>
 
-                <div id="nrs_modal_update" class="nrs_modal_content" style="display:none">
-                    <div id="nrs_update_explanation" class="nrs_message">
-                        <span id="nrs_update_explanation_blockchain_sync" data-i18n="update_blockchain_downloading">The blockchain is still downloading, check again after it's up to date.</span>
-                        <span id="nrs_update_explanation_wait" data-i18n="checking_for_updates">Checking for updates...</span>
-                        <span id="nrs_update_explanation_testnet" data-i18n="update_testnet">NRS cannot be updated whilst connected to the testnet.</span>
-                        <span id="nrs_update_explanation_up_to_date" data-i18n="update_up_to_date">You have the latest release already. There is no need to update.</span>
-                        <span id="nrs_update_explanation_new_release">
-                            <span data-i18n="update_available">A new NRS release is available. It is recommended that you update.</span>
+                <div id="krs_modal_update" class="krs_modal_content" style="display:none">
+                    <div id="krs_update_explanation" class="krs_message">
+                        <span id="krs_update_explanation_blockchain_sync" data-i18n="update_blockchain_downloading">The blockchain is still downloading, check again after it's up to date.</span>
+                        <span id="krs_update_explanation_wait" data-i18n="checking_for_updates">Checking for updates...</span>
+                        <span id="krs_update_explanation_testnet" data-i18n="update_testnet">KRS cannot be updated whilst connected to the testnet.</span>
+                        <span id="krs_update_explanation_up_to_date" data-i18n="update_up_to_date">You have the latest release already. There is no need to update.</span>
+                        <span id="krs_update_explanation_new_release">
+                            <span data-i18n="update_available">A new KRS release is available. It is recommended that you update.</span>
                             <br /><br />
-                            <button type="button" class="btn btn-success ignore" onclick="NRS.downloadClientUpdate('release', 'zip')">
-                                <span data-i18n="download_nrs_zip">Zip file</span>
+                            <button type="button" class="btn btn-success ignore" onclick="KRS.downloadClientUpdate('release', 'zip')">
+                                <span data-i18n="download_krs_zip">Zip file</span>
                                 &nbsp;
-                                <span class="nrs_new_version_nr"></span>
+                                <span class="krs_new_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success ignore" onclick="NRS.downloadClientUpdate('release', 'exe')">
-                                <span data-i18n="download_nrs_windows_installer">Windows installer</span>
+                            <button type="button" class="btn btn-success ignore" onclick="KRS.downloadClientUpdate('release', 'exe')">
+                                <span data-i18n="download_krs_windows_installer">Windows installer</span>
                                 &nbsp;
-                                <span class="nrs_new_version_nr"></span>
+                                <span class="krs_new_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success ignore" onclick="NRS.downloadClientUpdate('release', 'dmg')">
-                                <span data-i18n="download_nrs_mac_installer">Mac installer</span>
+                            <button type="button" class="btn btn-success ignore" onclick="KRS.downloadClientUpdate('release', 'dmg')">
+                                <span data-i18n="download_krs_mac_installer">Mac installer</span>
                                 &nbsp;
-                                <span class="nrs_new_version_nr"></span>
+                                <span class="krs_new_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success ignore" onclick="NRS.downloadClientUpdate('release', 'sh')">
-                                <span data-i18n="download_nrs_linux_installer">Linux installer</span>
+                            <button type="button" class="btn btn-success ignore" onclick="KRS.downloadClientUpdate('release', 'sh')">
+                                <span data-i18n="download_krs_linux_installer">Linux installer</span>
                                 &nbsp;
-                                <span class="nrs_new_version_nr"></span>
+                                <span class="krs_new_version_nr"></span>
                             </button>
                         </span>
-                        <span id="nrs_update_explanation_new_beta">
+                        <span id="krs_update_explanation_new_beta">
                             <span data-i18n="update_beta_available">A new experimental release is available. It is not recommended that you install this unless you know what you're doing.</span>
                             <br /><br />
-                            <button type="button" class="btn btn-success btn-xs ignore" onclick="NRS.downloadClientUpdate('beta', 'zip')">
-                                <span data-i18n="download_nrs_zip">Zip file</span>
+                            <button type="button" class="btn btn-success btn-xs ignore" onclick="KRS.downloadClientUpdate('beta', 'zip')">
+                                <span data-i18n="download_krs_zip">Zip file</span>
                                 &nbsp;
-                                <span class="nrs_beta_version_nr"></span>
+                                <span class="krs_beta_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success btn-xs ignore" onclick="NRS.downloadClientUpdate('beta', 'exe')">
-                                <span data-i18n="download_nrs_windows_installer">Windows installer</span>
+                            <button type="button" class="btn btn-success btn-xs ignore" onclick="KRS.downloadClientUpdate('beta', 'exe')">
+                                <span data-i18n="download_krs_windows_installer">Windows installer</span>
                                 &nbsp;
-                                <span class="nrs_beta_version_nr"></span>
+                                <span class="krs_beta_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success btn-xs ignore" onclick="NRS.downloadClientUpdate('beta', 'dmg')">
-                                <span data-i18n="download_nrs_mac_installer">Mac installer</span>
+                            <button type="button" class="btn btn-success btn-xs ignore" onclick="KRS.downloadClientUpdate('beta', 'dmg')">
+                                <span data-i18n="download_krs_mac_installer">Mac installer</span>
                                 &nbsp;
-                                <span class="nrs_beta_version_nr"></span>
+                                <span class="krs_beta_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success btn-xs ignore" onclick="NRS.downloadClientUpdate('beta', 'sh')">
-                                <span data-i18n="download_nrs_linux_installer">Linux installer</span>
+                            <button type="button" class="btn btn-success btn-xs ignore" onclick="KRS.downloadClientUpdate('beta', 'sh')">
+                                <span data-i18n="download_krs_linux_installer">Linux installer</span>
                                 &nbsp;
-                                <span class="nrs_beta_version_nr"></span>
+                                <span class="krs_beta_version_nr"></span>
                             </button>
                         </span>
-                        <span id="nrs_update_explanation_new_choice">
+                        <span id="krs_update_explanation_new_choice">
                             <span data-i18n="update_multiple_available">
                             Both a general and experimental release are available. It is not recommended that you install the experimental release unless you know what you're doing.
                             </span>
                             <br /><br />
                             <span data-i18n="general_release">General Release</span>
-                            <button type="button" class="btn btn-success ignore" onclick="NRS.downloadClientUpdate('release', 'zip')">
-                                <span data-i18n="download_nrs_zip">Zip file</span>
+                            <button type="button" class="btn btn-success ignore" onclick="KRS.downloadClientUpdate('release', 'zip')">
+                                <span data-i18n="download_krs_zip">Zip file</span>
                                 &nbsp;
-                                <span class="nrs_new_version_nr"></span>
+                                <span class="krs_new_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success ignore" onclick="NRS.downloadClientUpdate('release', 'exe')">
-                                <span data-i18n="download_nrs_windows_installer">Windows installer</span>
+                            <button type="button" class="btn btn-success ignore" onclick="KRS.downloadClientUpdate('release', 'exe')">
+                                <span data-i18n="download_krs_windows_installer">Windows installer</span>
                                 &nbsp;
-                                <span class="nrs_new_version_nr"></span>
+                                <span class="krs_new_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success ignore" onclick="NRS.downloadClientUpdate('release', 'dmg')">
-                                <span data-i18n="download_nrs_mac_installer">Mac installer</span>
+                            <button type="button" class="btn btn-success ignore" onclick="KRS.downloadClientUpdate('release', 'dmg')">
+                                <span data-i18n="download_krs_mac_installer">Mac installer</span>
                                 &nbsp;
-                                <span class="nrs_new_version_nr"></span>
+                                <span class="krs_new_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success ignore" onclick="NRS.downloadClientUpdate('release', 'sh')">
-                                <span data-i18n="download_nrs_linux_installer">Linux installer</span>
+                            <button type="button" class="btn btn-success ignore" onclick="KRS.downloadClientUpdate('release', 'sh')">
+                                <span data-i18n="download_krs_linux_installer">Linux installer</span>
                                 &nbsp;
-                                <span class="nrs_new_version_nr"></span>
+                                <span class="krs_new_version_nr"></span>
                             </button>
                             <br /><br />
                             <span data-i18n="experimental_release">Experimental Release</span>
-                            <button type="button" class="btn btn-success btn-xs ignore" onclick="NRS.downloadClientUpdate('beta', 'zip')">
-                                <span data-i18n="download_nrs_zip">Zip file</span>
+                            <button type="button" class="btn btn-success btn-xs ignore" onclick="KRS.downloadClientUpdate('beta', 'zip')">
+                                <span data-i18n="download_krs_zip">Zip file</span>
                                 &nbsp;
-                                <span class="nrs_beta_version_nr"></span>
+                                <span class="krs_beta_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success btn-xs ignore" onclick="NRS.downloadClientUpdate('beta', 'exe')">
-                                <span data-i18n="download_nrs_windows_installer">Windows installer</span>
+                            <button type="button" class="btn btn-success btn-xs ignore" onclick="KRS.downloadClientUpdate('beta', 'exe')">
+                                <span data-i18n="download_krs_windows_installer">Windows installer</span>
                                 &nbsp;
-                                <span class="nrs_beta_version_nr"></span>
+                                <span class="krs_beta_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success btn-xs ignore" onclick="NRS.downloadClientUpdate('beta', 'dmg')">
-                                <span data-i18n="download_nrs_mac_installer">Mac installer</span>
+                            <button type="button" class="btn btn-success btn-xs ignore" onclick="KRS.downloadClientUpdate('beta', 'dmg')">
+                                <span data-i18n="download_krs_mac_installer">Mac installer</span>
                                 &nbsp;
-                                <span class="nrs_beta_version_nr"></span>
+                                <span class="krs_beta_version_nr"></span>
                             </button>
-                            <button type="button" class="btn btn-success btn-xs ignore" onclick="NRS.downloadClientUpdate('beta', 'sh')">
-                                <span data-i18n="download_nrs_linux_installer">Linux installer</span>
+                            <button type="button" class="btn btn-success btn-xs ignore" onclick="KRS.downloadClientUpdate('beta', 'sh')">
+                                <span data-i18n="download_krs_linux_installer">Linux installer</span>
                                 &nbsp;
-                                <span class="nrs_beta_version_nr"></span>
+                                <span class="krs_beta_version_nr"></span>
                             </button>
                         </span>
                     </div>
 
-                    <div id="nrs_update_drop_zone"></div>
-                    <div id="nrs_update_result"></div>
-                    <div id="nrs_update_hashes" style="display:none;padding-top:10px;">
+                    <div id="krs_update_drop_zone"></div>
+                    <div id="krs_update_result"></div>
+                    <div id="krs_update_hashes" style="display:none;padding-top:10px;">
                         <table style="width:100%">
-                            <tr><td style="background-color:#efefef;font-weight:bold;"><span data-i18n="version">Version</span>:</td><td><span id="nrs_update_hash_version"></span></td></tr>
-                            <tr><td style="background-color:#efefef;font-weight:bold;"><span data-i18n="downloaded_hash">Downloaded hash</span>:</td><td><span id="nrs_update_hash_download"></span></td></tr>
-                            <tr><td style="background-color:#efefef;font-weight:bold;"><span data-i18n="official_hash">Official hash</span>:</td><td><span id="nrs_update_hash_official"></span></td></tr>
+                            <tr><td style="background-color:#efefef;font-weight:bold;"><span data-i18n="version">Version</span>:</td><td><span id="krs_update_hash_version"></span></td></tr>
+                            <tr><td style="background-color:#efefef;font-weight:bold;"><span data-i18n="downloaded_hash">Downloaded hash</span>:</td><td><span id="krs_update_hash_download"></span></td></tr>
+                            <tr><td style="background-color:#efefef;font-weight:bold;"><span data-i18n="official_hash">Official hash</span>:</td><td><span id="krs_update_hash_official"></span></td></tr>
                         </table>
                     </div>
 
-                    <div id="nrs_update_hash_progress">&nbsp;</div>
+                    <div id="krs_update_hash_progress">&nbsp;</div>
 
                     <div style="display:none">
-                        <iframe id="nrs_update_iframe"></iframe>
-                        <input type="file" id="nrs_update_file_select" name="files[]" />
+                        <iframe id="krs_update_iframe"></iframe>
+                        <input type="file" id="krs_update_file_select" name="files[]" />
                     </div>
                 </div>
 
-                <div id="nrs_modal_state" class="nrs_modal_content" style="display:none">
-                    <table class="table table-striped" id="nrs_node_state_table" style="margin-bottom:0;">
+                <div id="krs_modal_state" class="krs_modal_content" style="display:none">
+                    <table class="table table-striped" id="krs_node_state_table" style="margin-bottom:0;">
                         <tbody>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="version">Version</span>:</td><td><span id="nrs_node_state_version"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_blocks"># Blocks</span>:</td><td><span id="nrs_node_state_numberOfBlocks"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="version">Version</span>:</td><td><span id="krs_node_state_version"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_blocks"># Blocks</span>:</td><td><span id="krs_node_state_numberOfBlocks"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="last_block">Last Block</span>:</td><td><span id="nrs_node_state_lastBlock"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_accounts"># Accounts</span>:</td><td><span id="nrs_node_state_numberOfAccounts"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="last_block">Last Block</span>:</td><td><span id="krs_node_state_lastBlock"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_accounts"># Accounts</span>:</td><td><span id="krs_node_state_numberOfAccounts"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="last_feeder">Last Feeder</span>:</td><td><span id="nrs_node_state_lastBlockchainFeeder"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_unlocked_accounts"># Unlocked Accounts</span>:</td><td><span id="nrs_node_state_numberOfUnlockedAccounts"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="last_feeder">Last Feeder</span>:</td><td><span id="krs_node_state_lastBlockchainFeeder"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_unlocked_accounts"># Unlocked Accounts</span>:</td><td><span id="krs_node_state_numberOfUnlockedAccounts"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="last_feeder_height">Last Feeder Height</span>:</td><td><span id="nrs_node_state_lastBlockchainFeederHeight"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_peers"># Peers</span>:</td><td><span id="nrs_node_state_numberOfPeers"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="last_feeder_height">Last Feeder Height</span>:</td><td><span id="krs_node_state_lastBlockchainFeederHeight"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_peers"># Peers</span>:</td><td><span id="krs_node_state_numberOfPeers"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="total_memory">Total Memory</span>:</td><td><span id="nrs_node_state_totalMemory"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_transactions"># Transactions</span>:</td><td><span id="nrs_node_state_numberOfTransactions"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="total_memory">Total Memory</span>:</td><td><span id="krs_node_state_totalMemory"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_transactions"># Transactions</span>:</td><td><span id="krs_node_state_numberOfTransactions"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="free_memory">Free Memory</span>:</td><td><span id="nrs_node_state_freeMemory"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_aliases"># Aliases</span>:</td><td><span id="nrs_node_state_numberOfAliases"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="free_memory">Free Memory</span>:</td><td><span id="krs_node_state_freeMemory"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_aliases"># Aliases</span>:</td><td><span id="krs_node_state_numberOfAliases"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="max_memory">Max Memory</span>:</td><td><span id="nrs_node_state_maxMemory"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_orders"># Orders</span>:</td><td><span id="nrs_node_state_numberOfOrders"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="max_memory">Max Memory</span>:</td><td><span id="krs_node_state_maxMemory"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_orders"># Orders</span>:</td><td><span id="krs_node_state_numberOfOrders"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="processors">Processors</span>:</td><td><span id="nrs_node_state_availableProcessors"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_assets"># Assets</span>:</td><td><span id="nrs_node_state_numberOfAssets"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="processors">Processors</span>:</td><td><span id="krs_node_state_availableProcessors"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_assets"># Assets</span>:</td><td><span id="krs_node_state_numberOfAssets"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="difficulty">Difficulty</span>:</td><td><span id="nrs_node_state_cumulativeDifficulty"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_trades"># Trades</span>:</td><td><span id="nrs_node_state_numberOfTrades"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="difficulty">Difficulty</span>:</td><td><span id="krs_node_state_cumulativeDifficulty"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_trades"># Trades</span>:</td><td><span id="krs_node_state_numberOfTrades"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="time">Time</span>:</td><td><span id="nrs_node_state_time"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_polls"># Polls</span>:</td><td><span id="nrs_node_state_numberOfPolls"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="time">Time</span>:</td><td><span id="krs_node_state_time"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_polls"># Polls</span>:</td><td><span id="krs_node_state_numberOfPolls"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="is_downloading">Is Downloading</span>:</td><td><span id="nrs_node_state_isDownloading"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_votes"># Votes</span>:</td><td><span id="nrs_node_state_numberOfVotes"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="is_downloading">Is Downloading</span>:</td><td><span id="krs_node_state_isDownloading"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_votes"># Votes</span>:</td><td><span id="krs_node_state_numberOfVotes"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="nr_prunable_messages"># Prunable Messages</span>:</td><td><span id="nrs_node_state_numberOfPrunableMessages"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_phasing_only_accounts"># Phasing Only Accounts</span>:</td><td><span id="nrs_node_state_numberOfPhasingOnlyAccounts"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_prunable_messages"># Prunable Messages</span>:</td><td><span id="krs_node_state_numberOfPrunableMessages"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_phasing_only_accounts"># Phasing Only Accounts</span>:</td><td><span id="krs_node_state_numberOfPhasingOnlyAccounts"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="nr_tagged_data"># Tagged Data Items</span>:</td><td><span id="nrs_node_state_numberOfTaggedData"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_data_tags"># Data Tags</span>:</td><td><span id="nrs_node_state_numberOfDataTags"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_tagged_data"># Tagged Data Items</span>:</td><td><span id="krs_node_state_numberOfTaggedData"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_data_tags"># Data Tags</span>:</td><td><span id="krs_node_state_numberOfDataTags"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="nr_account_leases"># Account Leases</span>:</td><td><span id="nrs_node_state_numberOfAccountLeases"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_active_account_leases"># Active Account Leases</span>:</td><td><span id="nrs_node_state_numberOfActiveAccountLeases"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_account_leases"># Account Leases</span>:</td><td><span id="krs_node_state_numberOfAccountLeases"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_active_account_leases"># Active Account Leases</span>:</td><td><span id="krs_node_state_numberOfActiveAccountLeases"></span></td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold"><span data-i18n="nr_shufflings"># Shufflings</span>:</td><td><span id="nrs_node_state_numberOfShufflings"></span></td>
-                                <td style="font-weight: bold"><span data-i18n="nr_active_shufflings"># Active Shufflings</span>:</td><td><span id="nrs_node_state_numberOfActiveShufflings"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_shufflings"># Shufflings</span>:</td><td><span id="krs_node_state_numberOfShufflings"></span></td>
+                                <td style="font-weight: bold"><span data-i18n="nr_active_shufflings"># Active Shufflings</span>:</td><td><span id="krs_node_state_numberOfActiveShufflings"></span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -382,7 +382,7 @@
                  </div>
 
                 <div id="account_details_modal_leasing" class="account_details_modal_content" style="display:none">
-                    <div id="account_leasing_status" class="nrs_message" style="display:none"></div>
+                    <div id="account_leasing_status" class="krs_message" style="display:none"></div>
                     <div id="account_lessor_container" style="display:none;max-height:350px;overflow:auto;">
                         <table class="table table-striped" id="account_lessor_table" style="margin-bottom:0">
                             <thead>
@@ -427,7 +427,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" data-i18n="nxt_token_generation_validation">Nxt Token Generation / Validation</h4>
+                <h4 class="modal-title" data-i18n="kpl_token_generation_validation">Kpl Token Generation / Validation</h4>
             </div>
             <div class="modal-body">
                 <ul class="nav nav-pills nav-justified" style="margin-bottom:10px">
@@ -623,18 +623,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" data-i18n="about_nxt">About Nxt</h4>
+                <h4 class="modal-title" data-i18n="about_kpl">About Kpl</h4>
             </div>
             <div class="modal-body">
                 <div>
-                    <img height="128px" width="128px" src="img/nxt_logo.png" align="left" hspace="10" vspace="10">
+                    <img height="128px" width="128px" src="img/kpl_logo.png" align="left" hspace="10" vspace="10">
                     <p>
-                        Copyright © 2013-2016 The Nxt Core Developers.<br />
+                        Copyright © 2013-2016 The Kpl Core Developers.<br />
                         Copyright © 2016-2017 Jelurida IP B.V.<br />
-                        Distributed under the <a href="https://www.jelurida.com/jpl" target="_new">Jelurida Public License (JPL)</a> version 1.0 for the Nxt Public Blockchain Platform, with ABSOLUTELY NO WARRANTY.<br />
+                        Distributed under the <a href="https://www.jelurida.com/jpl" target="_new">Jelurida Public License (JPL)</a> version 1.0 for the Kpl Public Blockchain Platform, with ABSOLUTELY NO WARRANTY.<br />
                     </p>
                     <p>
-                        The Nxt Reference Software (NRS) is developed by <a href="https://www.jelurida.com" target="_new"><img src="img/jelurida_logo.png" height="24px" alt="Jelurida" align="center" hspace="2">Jelurida</a>,<br />
+                        The Kpl Reference Software (KRS) is developed by <a href="https://www.jelurida.com" target="_new"><img src="img/jelurida_logo.png" height="24px" alt="Jelurida" align="center" hspace="2">Jelurida</a>,<br />
                         the creators of open source blockchain solutions.<br />
                     </p>
                     <p>
@@ -910,7 +910,7 @@
                 <div class="user_info_modal_content data-never-loading" id="user_info_modal_actions" style="display:none;">
                     <div class="row">
                         <div class="col-xs-6 col-md-6" style="margin-left:auto;margin-right:auto;float:none;">
-                            <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#send_money_modal" data-account="" data-i18n="send_nxt">Send NXT</button>
+                            <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#send_money_modal" data-account="" data-i18n="send_kpl">Send KPL</button>
                             <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#transfer_currency_modal" data-account="" data-i18n="send_currency">Send Currency</button>
                             <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#send_message_modal" data-account="" data-i18n="send_a_message">Send a Message</button>
                             <button type="button" id="user_info_modal_add_as_contact" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#add_contact_modal" data-account="" data-i18n="add_as_contact">Add as Contact</button>

@@ -1,12 +1,12 @@
 /******************************************************************************
- * Copyright © 2013-2016 The Nxt Core Developers.                             *
+ * Copyright © 2013-2016 The Kpl Core Developers.                             *
  * Copyright © 2016-2017 Jelurida IP B.V.                                     *
  *                                                                            *
  * See the LICENSE.txt file at the top-level directory of this distribution   *
  * for licensing information.                                                 *
  *                                                                            *
  * Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,*
- * no part of the Nxt software, including this file, may be copied, modified, *
+ * no part of the Kpl software, including this file, may be copied, modified, *
  * propagated, or distributed except according to the terms contained in the  *
  * LICENSE.txt file.                                                          *
  *                                                                            *
@@ -37,7 +37,7 @@ RemoteNodesManager.prototype.REMOTE_NODES_BOOTSTRAP =
                 "blacklisted": false,
                 "announcedAddress": "107.170.3.62",
                 "apiPort": 6876,
-                "application": "NRS",
+                "application": "KRS",
                 "port": 6874,
                 "outboundWebSocket": true,
                 "lastConnectAttempt": 117808985,
@@ -60,14 +60,14 @@ RemoteNodesManager.prototype.REMOTE_NODES_BOOTSTRAP =
                     "CORS"
                 ],
                 "version": "1.11.7",
-                "platform": "nxt.noip.me",
+                "platform": "kpl.noip.me",
                 "inboundWebSocket": true,
                 "apiSSLPort": 6877,
                 "lastUpdated": 117831321,
                 "blacklisted": false,
-                "announcedAddress": "nxt.noip.me",
+                "announcedAddress": "kpl.noip.me",
                 "apiPort": 6876,
-                "application": "NRS",
+                "application": "KRS",
                 "port": 6874,
                 "outboundWebSocket": true,
                 "lastConnectAttempt": 117831321,
@@ -94,7 +94,7 @@ RemoteNodesManager.prototype.REMOTE_NODES_BOOTSTRAP =
                 "blacklisted": false,
                 "announcedAddress": "174.140.168.136",
                 "apiPort": 6876,
-                "application": "NRS",
+                "application": "KRS",
                 "port": 6874,
                 "outboundWebSocket": true,
                 "lastConnectAttempt": 117803596,
@@ -119,7 +119,7 @@ RemoteNodesManager.prototype.REMOTE_NODES_BOOTSTRAP =
                 "blacklisted": false,
                 "announcedAddress": "5.200.23.15",
                 "apiPort": 6876,
-                "application": "NRS",
+                "application": "KRS",
                 "port": 6874,
                 "outboundWebSocket": true,
                 "lastConnectAttempt": 117829558,
@@ -146,7 +146,7 @@ RemoteNodesManager.prototype.REMOTE_NODES_BOOTSTRAP =
                 "blacklisted": false,
                 "announcedAddress": "brangdon.duckdns.org",
                 "apiPort": 6876,
-                "application": "NRS",
+                "application": "KRS",
                 "port": 6874,
                 "outboundWebSocket": true,
                 "lastConnectAttempt": 117828345,

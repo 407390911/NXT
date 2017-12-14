@@ -1,12 +1,12 @@
 /******************************************************************************
- * Copyright © 2013-2016 The Nxt Core Developers.                             *
+ * Copyright © 2013-2016 The Kpl Core Developers.                             *
  * Copyright © 2016-2017 Jelurida IP B.V.                                     *
  *                                                                            *
  * See the LICENSE.txt file at the top-level directory of this distribution   *
  * for licensing information.                                                 *
  *                                                                            *
  * Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,*
- * no part of the Nxt software, including this file, may be copied, modified, *
+ * no part of the Kpl software, including this file, may be copied, modified, *
  * propagated, or distributed except according to the terms contained in the  *
  * LICENSE.txt file.                                                          *
  *                                                                            *
@@ -14,21 +14,21 @@
  *                                                                            *
  ******************************************************************************/
 
-var NRS = (function (NRS) {
+var KRS = (function (KRS) {
     var currentLocale = {};
 
-    NRS.getLocaleList = function() {
+    KRS.getLocaleList = function() {
         return SORTED_LOCALE_DATE;
     };
     
-    NRS.getLocaleName = function(locale) {
+    KRS.getLocaleName = function(locale) {
         return LOCALE_DATA[locale].displayName;
     };
 
-    NRS.getLocale = function () {
+    KRS.getLocale = function () {
         var lang;
-        if (NRS.settings && NRS.settings['regional_format'] != "default") {
-            lang = NRS.settings['regional_format'];
+        if (KRS.settings && KRS.settings['regional_format'] != "default") {
+            lang = KRS.settings['regional_format'];
         } else {
             lang = window.javaFxLanguage || window.navigator.userLanguage || window.navigator.language;
             if (!LOCALE_DATA[lang]) {
@@ -42,7 +42,7 @@ var NRS = (function (NRS) {
                                 continue;
                             }
                             if (tokens[i].substring(0, separator) == lang) {
-                                NRS.logConsole("Language " + lang + " resolved to locale " + tokens[i]);
+                                KRS.logConsole("Language " + lang + " resolved to locale " + tokens[i]);
                                 lang = tokens[i];
                                 break;
                             }
@@ -51,7 +51,7 @@ var NRS = (function (NRS) {
                 }
                 if (!LOCALE_DATA[lang]) {
                     if (!currentLocale.lang) {
-                        NRS.logConsole("Cannot find locale definitions for language " + lang + " default to en-US");
+                        KRS.logConsole("Cannot find locale definitions for language " + lang + " default to en-US");
                     }
                     lang = "en-US";
                 }
@@ -64,7 +64,7 @@ var NRS = (function (NRS) {
             currentLocale.decimal = LOCALE_DATA[lang].decimal;
             currentLocale.section = LOCALE_DATA[lang].section;
             currentLocale.displayName = LOCALE_DATA[lang].displayName;
-            NRS.logConsole("Locale language: '" + currentLocale.lang +
+            KRS.logConsole("Locale language: '" + currentLocale.lang +
                 "' date format: '" + currentLocale.dateFormat +
                 "' decimal separator: '" + currentLocale.decimal +
                 "' section separator: '" + currentLocale.section +
@@ -290,5 +290,5 @@ var NRS = (function (NRS) {
         return LOCALE_DATA[a].displayName.localeCompare(LOCALE_DATA[b].displayName);
     });
 
-    return NRS;
-}(NRS || {}));
+    return KRS;
+}(KRS || {}));

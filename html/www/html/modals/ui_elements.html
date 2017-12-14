@@ -1,12 +1,12 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright © 2013-2016 The Nxt Core Developers.                            ~
+  ~ Copyright © 2013-2016 The Kpl Core Developers.                            ~
   ~ Copyright © 2016-2017 Jelurida IP B.V.                                    ~
   ~                                                                           ~
   ~ See the LICENSE.txt file at the top-level directory of this distribution  ~
   ~ for licensing information.                                                ~
   ~                                                                           ~
   ~ Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,
-  ~ no part of the Nxt software, including this file, may be copied, modified,~
+  ~ no part of the Kpl software, including this file, may be copied, modified,~
   ~ propagated, or distributed except according to the terms contained in the ~
   ~ LICENSE.txt file.                                                         ~
   ~                                                                           ~
@@ -33,13 +33,13 @@
     <div class="input-group">
         <input type="text" name="{{inputName}}" id="{{modalName}}_{{labelI18n}}" class="form-control bhm_ue_time_input" value="{{initBlockHeight}}" placeholder="{{labelText}}" data-i18n="{{labelI18n}}" />
         <span class="input-group-addon">
-            <a href="#" class="bhm_ue_use_current_block_height" data-current-block-height="" style="color:#000;" data-content="" data-placement="bottom" data-toggle="popover" data-trigger="hover" data-container="#{{modalId}}" data-i18n="[data-content]current_block_height_help"><span class="bhm_ue_current_block_height"></span></a>
+            <a href="#" class="bhm_ue_use_current_block_height" data-current-block-height="" data-content="" data-placement="bottom" data-toggle="popover" data-trigger="hover" data-container="#{{modalId}}" data-i18n="[data-content]current_block_height_help"><span class="bhm_ue_current_block_height" style="color: #fbf8ef;"></span></a>
         </span>
         <span class="input-group-btn">
-            <button class="btn btn-default bhm_ue_reduce_height_btn" data-bhm-ue-num-blocks="{{changeHeightBlocks}}" data-content="-{{changeHeightBlocks}}" data-placement="bottom" data-toggle="popover" data-trigger="hover" data-container="#{{modalId}}" type="button"><i class="fa fa-minus-circle"></i></button>
+            <button class="btn btn-default bhm_ue_reduce_height_btn" data-bhm-ue-num-blocks="{{changeHeightBlocks}}" data-content="-{{changeHeightBlocks}}" data-placement="bottom" data-toggle="popover" data-trigger="hover" data-container="#{{modalId}}" type="button" style="border: 1px solid #17b3f9;"><i class="fa fa-minus-circle"></i></button>
         </span>
         <span class="input-group-btn">
-            <button class="btn btn-default bhm_ue_add_height_btn" data-bhm-ue-num-blocks="{{changeHeightBlocks}}" data-content="+{{changeHeightBlocks}}" data-placement="right" data-toggle="popover" data-trigger="hover" data-container="#{{modalId}}" type="button"><i class="fa fa-plus-circle"></i></button>
+            <button class="btn btn-default bhm_ue_add_height_btn" data-bhm-ue-num-blocks="{{changeHeightBlocks}}" data-content="+{{changeHeightBlocks}}" data-placement="right" data-toggle="popover" data-trigger="hover" data-container="#{{modalId}}" type="button" style="border: 1px solid #17b3f9;"><i class="fa fa-plus-circle"></i></button>
         </span>
     </div>
 </div>
@@ -103,7 +103,7 @@
     <div class="input-group">
         <select class="form-control" name="{{selectName}}" id="{{modalName}}_{{labelI18n}}">
             <option value="0" selected data-i18n="min_balance_none">No min balance necessary</option>
-            <option value="1" data-i18n="min_balance_type_nxt">Min balance of NXT required</option>
+            <option value="1" data-i18n="min_balance_type_kpl">Min balance of KPL required</option>
             <option value="2" data-i18n="min_balance_type_asset">Min balance of asset quantity required</option>
             <option value="3" data-i18n="min_balance_type_currency">Min balance of currency units required</option>
         </select>

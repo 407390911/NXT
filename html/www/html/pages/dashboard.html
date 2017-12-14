@@ -1,12 +1,12 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright © 2013-2016 The Nxt Core Developers.                            ~
+  ~ Copyright © 2013-2016 The Kpl Core Developers.                            ~
   ~ Copyright © 2016-2017 Jelurida IP B.V.                                    ~
   ~                                                                           ~
   ~ See the LICENSE.txt file at the top-level directory of this distribution  ~
   ~ for licensing information.                                                ~
   ~                                                                           ~
   ~ Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,
-  ~ no part of the Nxt software, including this file, may be copied, modified,~
+  ~ no part of the Kpl software, including this file, may be copied, modified,~
   ~ propagated, or distributed except according to the terms contained in the ~
   ~ LICENSE.txt file.                                                         ~
   ~                                                                           ~
@@ -17,61 +17,107 @@
 <div id="dashboard_page" class="page" style="display:block">
     <section class="content-header">
         <span style="float:right; font-size:115%;">
-            <span id="nrs_version_info" data-i18n="nrs_version">NRS Version</span>:
-            <a href="#" class="small-box-footer" data-toggle="modal" data-target="#nrs_modal">
-                <span id="nrs_version" class="loading_dots"><span>.</span><span>.</span><span>.</span></span>
+            <span id="krs_version_info" data-i18n="krs_version">KRS Version</span>:
+            <a href="#" class="small-box-footer" data-toggle="modal" data-target="#krs_modal">
+                <span id="krs_version" class="loading_dots"><span>.</span><span>.</span><span>.</span></span>
             </a>
-            <span class="label label-danger" id="nrs_update" style="display:none;"></span>
+            <span class="label label-danger" id="krs_update" style="display:none;"></span>
         </span>
         <h1 data-i18n="dashboard">Dashboard</h1>
     </section>
 
     <section class="content">
-        <div class="alert-danger alert alert-no-icon" id="dashboard_message" style="display:none;padding:5px;margin-bottom:15px;"></div>
+        <div class="alert-danger alert alert-no-icon" id="dashboard_message" style="display:none;padding:15px;margin-bottom:20px;"></div>
+        
+        <div class="alert-danger alert alert-no-icon" id="secondary_dashboard_message" style="display:none;padding:15px;margin-bottom:20px;"></div>
 
-        <div class="alert-danger alert alert-no-icon" id="secondary_dashboard_message" style="display:none;padding:5px;margin-bottom:15px;"></div>
+        <div class="box box-primary">
+            <table width="100%" style="background:none;">
+                <tr>
+                    <td>
+                        <h1 style="margin-top:0;"><span style="font-size:22px" id="krs_current_block_time" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
+                        <p><span id="krs_block" data-i18n="last_updated">Last Updated</span> (<span data-i18n="block">Block</span>: <span class="krs_current_block loading_dots"><span>.</span><span>.</span><span>.</span></span>)</p>
+                        <a href="#" class="small-box-footer goto-page" data-page="blocks"><span data-i18n="more_info">More info</span> <i class="fa fa-arrow-circle-right"></i></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-        <div class="dashboard_first_row row">
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3><span id="account_balance" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
-                        <p><span data-i18n="account_balance">Account Balance</span> <span class="label" id="account_leasing" style="display:none;background-color:#1990B1"></span></p>
-                    </div>
-                    <div class="icon"><i class="fa fa-briefcase"></i></div>
-                    <a href="#" class="small-box-footer" data-toggle="modal" data-target="#account_details_modal"><span data-i18n="more_info">More info</span> <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="optional_dashboard_tile col-lg-3 col-xs-6">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3><span id="account_assets_balance" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
-                        <p style="display:inline-block" data-i18n="assets_value">Assets value</p> <p style="display:inline-block">(<span id="account_nr_assets" class="loading_dots"></span></p> <p style="display:inline-block"><span data-i18n="assets_owned">Assets Owned</span>)</p>
-                    </div>
-                    <div class="icon"><i class="fa fa-signal"></i></div>
-                    <a href="#" class="small-box-footer goto-page" data-page="my_assets"><span data-i18n="more_info">More info</span> <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="optional_dashboard_tile col-lg-3 col-xs-6">
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3><span id="account_currencies_balance" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
-                        <p style="display:inline-block" data-i18n="currencies_value">Currencies value</p> <p style="display:inline-block">(<span id="account_nr_currencies" class="loading_dots"></span></p> <p style="display:inline-block"><span data-i18n="currencies_owned">Currencies Owned</span>)</p>
-                    </div>
-                    <div class="icon"><i class="fa fa-bank"></i></div>
-                    <a href="#" class="small-box-footer goto-page" data-page="currencies"><span data-i18n="more_info">More info</span> <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="optional_dashboard_tile col-lg-3 col-xs-6">
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3><span id="account_purchase_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
+        <div class="box box-primary">
+            <table width="100%" style="background:none;">
+                <tr>
+                    <td width="33.333333%">
+                        <h1 id="account_balance" class="loading_dots"><span>.</span><span>.</span><span>.</span></h1>
+                        <span data-i18n="account_balance">Account Balance</span>
+                        <span class="label" id="account_leasing" style="display:none;background-color:#1990B1"></span>
+                        <div>
+                            <a href="#" class="small-box-footer" data-toggle="modal" data-target="#account_details_modal">
+                                <span data-i18n="more_info">More info</span> <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
+                    </td>
+                    <td width="33.333333%">
+                        <h1 id="account_assets_balance" class="loading_dots"><span>.</span><span>.</span><span>.</span></h1>
+                        <p style="display:inline-block" data-i18n="assets_value">Assets value</p>
+                        <p style="display:inline-block">(<span id="account_nr_assets" class="loading_dots"></span></p>
+                        <p style="display:inline-block"><span data-i18n="assets_owned">Assets Owned</span>)</p>
+                        <div>
+                            <a href="#" class="small-box-footer goto-page" data-page="my_assets">
+                                <span data-i18n="more_info">More info</span>
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
+                    </td>
+                    <!--td width="25%">
+                        <h1 id="account_currencies_balance" class="loading_dots"><span>.</span><span>.</span><span>.</span></h1>
+                        <p style="display:inline-block" data-i18n="currencies_value">Currencies value</p>
+                        <p style="display:inline-block">(<span id="account_nr_currencies" class="loading_dots"></span></p>
+                        <p style="display:inline-block"><span data-i18n="currencies_owned">Currencies Owned</span>)</p>
+                        <div>
+                            <a href="#" class="small-box-footer goto-page" data-page="currencies">
+                                <span data-i18n="more_info">More info</span>
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
+                    </td-->
+                    <td width="33.333333%">
+                        <h1 id="account_purchase_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></h1>
                         <p data-i18n="purchased_products">Purchased Products</p>
-                    </div>
-                    <div class="icon"><i class="fa fa-shopping-cart"></i></div>
-                    <a href="#" class="small-box-footer goto-page" data-page="purchased_dgs"><span data-i18n="more_info">More info</span> <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
+                        <div>
+                            <a href="#" class="small-box-footer goto-page" data-page="purchased_dgs">
+                                <span data-i18n="more_info">More info</span>
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="33.333333%">
+                        <h1 id="account_pending_sale_count" class="loading_dots">
+                            <span>.</span><span>.</span><span>.</span></span>
+                            <span> / </span>
+                            <span id="account_completed_sale_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span>
+                        </h1>
+                        <p><span data-i18n="pending">Pending</span><span> / </span><span data-i18n="completed_sales">Completed Sales</span></p>
+                        <a href="#" class="small-box-footer goto-page" data-page="pending_orders_dgs"><span data-i18n="more_info">More info</span> <i class="fa fa-arrow-circle-right"></i></a>
+                    </td>
+                    <td width="33.333333%">
+                        <h1><span id="account_message_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
+                        <p data-i18n="message_count">Messages</p>
+                        <a href="#" class="small-box-footer goto-page" data-page="messages"><span data-i18n="more_info">More info</span> <i class="fa fa-arrow-circle-right"></i></a>
+                    </td>
+                    <td width="33.333333%">
+                        <h1><span id="account_alias_count" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
+                        <p data-i18n="aliases">Aliases</p>
+                        <a href="#" class="small-box-footer goto-page" data-page="aliases"><span data-i18n="more_info">More info</span> <i class="fa fa-arrow-circle-right"></i></a>
+                    </td>
+                    <!--td width="25%">
+                        <h1><span style="font-size:22px" id="krs_current_block_time" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h1>
+                        <p><span id="krs_block" data-i18n="last_updated">Last Updated</span> (<span data-i18n="block">Block</span>: <span class="krs_current_block loading_dots"><span>.</span><span>.</span><span>.</span></span>)</p>
+                        <a href="#" class="small-box-footer goto-page" data-page="blocks"><span data-i18n="more_info">More info</span> <i class="fa fa-arrow-circle-right"></i></a>
+                    </td-->
+                </tr>
+            </table>
         </div>
         <div class="row">
             <div class="optional_dashboard_tile col-lg-3 col-xs-6">
@@ -111,8 +157,8 @@
             <div class="block_info_dashboard_tile col-lg-3 col-xs-6">
                 <div class="small-box bg-red">
                     <div class="inner">
-                        <h3><span id="nrs_current_block_time" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
-                        <p><span id="nrs_block" data-i18n="last_updated">Last Updated</span> (<span data-i18n="block">Block</span>: <span class="nrs_current_block loading_dots"><span>.</span><span>.</span><span>.</span></span>)</p>
+                        <h3><span id="krs_current_block_time" class="loading_dots"><span>.</span><span>.</span><span>.</span></span></h3>
+                        <p><span id="krs_block" data-i18n="last_updated">Last Updated</span> (<span data-i18n="block">Block</span>: <span class="krs_current_block loading_dots"><span>.</span><span>.</span><span>.</span></span>)</p>
                     </div>
                     <div class="icon"><i class="fa fa-code"></i></div>
                     <a href="#" class="small-box-footer goto-page" data-page="blocks"><span data-i18n="more_info">More info</span> <i class="fa fa-arrow-circle-right"></i></a>

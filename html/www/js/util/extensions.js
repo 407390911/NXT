@@ -1,12 +1,12 @@
 /******************************************************************************
- * Copyright © 2013-2016 The Nxt Core Developers.                             *
+ * Copyright © 2013-2016 The Kpl Core Developers.                             *
  * Copyright © 2016-2017 Jelurida IP B.V.                                     *
  *                                                                            *
  * See the LICENSE.txt file at the top-level directory of this distribution   *
  * for licensing information.                                                 *
  *                                                                            *
  * Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,*
- * no part of the Nxt software, including this file, may be copied, modified, *
+ * no part of the Kpl software, including this file, may be copied, modified, *
  * propagated, or distributed except according to the terms contained in the  *
  * LICENSE.txt file.                                                          *
  *                                                                            *
@@ -77,7 +77,7 @@ $.fn.hasAttr = function(name) {
 
 //https://github.com/bryanwoods/autolink-js/blob/master/autolink.js
 String.prototype['autoLink'] = function () {
-	var output = NRS.escapeRespStr(this);
+	var output = KRS.escapeRespStr(this);
 	var pattern = /(^|\s)((?:https?|ftp):\/\/[\-A-Z0-9+\u0026\u2019@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi;
 	//noinspection HtmlUnknownTarget
 	return output.replace(pattern, "$1<a href='$2' target='_blank'>$2</a>");

@@ -1,12 +1,12 @@
 /******************************************************************************
- * Copyright © 2013-2016 The Nxt Core Developers.                             *
+ * Copyright © 2013-2016 The Kpl Core Developers.                             *
  * Copyright © 2016-2017 Jelurida IP B.V.                                          *
  *                                                                            *
  * See the LICENSE.txt file at the top-level directory of this distribution   *
  * for licensing information.                                                 *
  *                                                                            *
  * Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,*
- * no part of the Nxt software, including this file, may be copied, modified, *
+ * no part of the Kpl software, including this file, may be copied, modified, *
  * propagated, or distributed except according to the terms contained in the  *
  * LICENSE.txt file.                                                          *
  *                                                                            *
@@ -53,7 +53,7 @@ var PassPhraseGenerator = {
 			this.passPhrase = phraseWords.join(" ");
 			crypto.getRandomValues(random);
 			$container.find(".step_2 textarea").val(this.passPhrase).prop("readonly", true);
-			$container.find("#step_2_account").val(NRS.getAccountId(this.passPhrase, true));
+			$container.find("#step_2_account").val(KRS.getAccountId(this.passPhrase, true));
 			setTimeout(function () {
 				$("#account_phrase_generator_start").hide();
                 $("#confirm_passphrase_warning").prop('checked', false);

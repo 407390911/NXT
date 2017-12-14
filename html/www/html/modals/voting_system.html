@@ -1,19 +1,24 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright © 2013-2016 The Nxt Core Developers.                            ~
+  ~ Copyright © 2013-2016 The Kpl Core Developers.                            ~
   ~ Copyright © 2016-2017 Jelurida IP B.V.                                    ~
   ~                                                                           ~
   ~ See the LICENSE.txt file at the top-level directory of this distribution  ~
   ~ for licensing information.                                                ~
   ~                                                                           ~
   ~ Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,
-  ~ no part of the Nxt software, including this file, may be copied, modified,~
+  ~ no part of the Kpl software, including this file, may be copied, modified,~
   ~ propagated, or distributed except according to the terms contained in the ~
   ~ LICENSE.txt file.                                                         ~
   ~                                                                           ~
   ~ Removal or modification of this copyright notice is prohibited.           ~
   ~                                                                           ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-
+ <style>
+    button.remove_answer{
+    background: #17b3f9;
+    border: 1px solid #17b3f9;
+}
+</style>
 <div class="modal fade" id="create_poll_modal" data-transaction-type="1" data-transaction-subtype="2" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -40,7 +45,7 @@
                                     <option selected value="0" data-i18n="vote_by_account">Vote by Account</option>
                                     <option value="1" data-i18n="vote_by_balance">Vote by Account Balance</option>
                                     <option value="2" data-i18n="vote_by_asset">Vote by Asset Balance</option>
-                                    <option value="3" data-i18n="vote_by_currency">Vote by Currency Balance</option>
+                                    <!-- <option value="3" data-i18n="vote_by_currency">Vote by Currency Balance</option> -->
                                 </select>
                             </div>
                         </div>

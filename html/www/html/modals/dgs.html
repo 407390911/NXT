@@ -1,12 +1,12 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright © 2013-2016 The Nxt Core Developers.                            ~
+  ~ Copyright © 2013-2016 The Kpl Core Developers.                            ~
   ~ Copyright © 2016-2017 Jelurida IP B.V.                                    ~
   ~                                                                           ~
   ~ See the LICENSE.txt file at the top-level directory of this distribution  ~
   ~ for licensing information.                                                ~
   ~                                                                           ~
   ~ Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,
-  ~ no part of the Nxt software, including this file, may be copied, modified,~
+  ~ no part of the Kpl software, including this file, may be copied, modified,~
   ~ propagated, or distributed except according to the terms contained in the ~
   ~ LICENSE.txt file.                                                         ~
   ~                                                                           ~
@@ -41,8 +41,8 @@
                             <div class="form-group">
                                 <label for="dgs_listing_price" data-i18n="price">PRICE</label>
                                 <div class="input-group">
-                                    <input type="number" name="priceNXT" id="dgs_listing_price" class="form-control" min="0" placeholder="Price" data-i18n="[placeholder]price" step="any" data-default="" value="" tabindex="4">
-                                    <span class="input-group-addon">NXT</span>
+                                    <input type="number" name="priceKPL" id="dgs_listing_price" class="form-control" min="0" placeholder="Price" data-i18n="[placeholder]price" step="any" data-default="" value="" tabindex="4">
+                                    <span class="input-group-addon">KPL</span>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="dgs_listing_image" data-i18n="image">Image</label>
-                                <input type="file" name="image" id="dgs_listing_image" class="form-control" tabindex="6" onchange='NRS.dgs_makebase64("dgs_listing_modal")'>
+                                <input type="file" name="image" id="dgs_listing_image" class="form-control" tabindex="6" onchange='KRS.dgs_makebase64("dgs_listing_modal")'>
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6" style="width:100px;height:100px;">
@@ -147,8 +147,8 @@
                             <div class="form-group">
                                 <label for="dgs_price_change_price" data-i18n="new_price">NEW PRICE</label>
                                 <div class="input-group">
-                                    <input type="number" name="priceNXT" id="dgs_price_change_price" class="form-control" placeholder="New Price" data-i18n="new_price" min="1" data-default="1" value="1" tabindex="1" step="any">
-                                    <span class="input-group-addon">NXT</span>
+                                    <input type="number" name="priceKPL" id="dgs_price_change_price" class="form-control" placeholder="New Price" data-i18n="new_price" min="1" data-default="1" value="1" tabindex="1" step="any">
+                                    <span class="input-group-addon">KPL</span>
                                 </div>
                             </div>
                         </div>
@@ -352,8 +352,8 @@
                     <div class="form-group">
                         <label for="dgs_delivery_discount" data-i18n="discount">DISCOUNT</label>
                         <div class="input-group">
-                            <input type="number" name="discountNXT" id="dgs_delivery_discount" class="form-control" min="0" placeholder="Discount" data-i18n="discount" step="any" data-default="0" value="0" tabindex="3">
-                            <span class="input-group-addon">NXT</span>
+                            <input type="number" name="discountKPL" id="dgs_delivery_discount" class="form-control" min="0" placeholder="Discount" data-i18n="discount" step="any" data-default="0" value="0" tabindex="3">
+                            <span class="input-group-addon">KPL</span>
                         </div>
                     </div>
                     <div data-replace-with-modal-template="fee_calculation_modal_template"></div>
@@ -465,8 +465,8 @@
                     <div class="form-group">
                         <label for="dgs_refund_refund" data-i18n="refund">REFUND</label>
                         <div class="input-group">
-                            <input type="number" name="refundNXT" id="dgs_refund_refund" class="form-control" min="0" placeholder="Refund Price" data-i18n="[placeholder]refund_price" step="any" data-default="0" value="0" tabindex="3">
-                            <span class="input-group-addon">NXT</span>
+                            <input type="number" name="refundKPL" id="dgs_refund_refund" class="form-control" min="0" placeholder="Refund Price" data-i18n="[placeholder]refund_price" step="any" data-default="0" value="0" tabindex="3">
+                            <span class="input-group-addon">KPL</span>
                         </div>
                     </div>
                     <div data-replace-with-modal-template="add_message_modal_template"></div>

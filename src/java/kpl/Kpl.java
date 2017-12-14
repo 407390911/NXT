@@ -66,8 +66,9 @@ public final class Kpl {
     private static final DirProvider dirProvider;
 
     private static final Properties defaultProperties = new Properties();
+
     static {
-        System.setProperty("kpl.runtime.mode","desktop");//加载桌面，默认
+        System.setProperty("kpl.runtime.mode", "desktop");//加载桌面，默认//service
         redirectSystemStreams("out");
         redirectSystemStreams("err");
         System.out.println("Initializing Kpl server version " + Kpl.VERSION);
@@ -153,7 +154,7 @@ public final class Kpl {
                         System.out.printf("Creating dir %s\n", homeDir);
                         try {
                             Files.createDirectory(Paths.get(homeDir));
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             if (!(e instanceof NoSuchFileException)) {
                                 throw e;
                             }
@@ -181,7 +182,7 @@ public final class Kpl {
                     throw new IllegalArgumentException("Error loading " + propertiesFile, e);
                 }
             }
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace(); // make sure we log this exception
             throw e;
         }
@@ -230,7 +231,7 @@ public final class Kpl {
 
     public static String getStringProperty(String name, String defaultValue, boolean doNotLog, String encoding) {
         String value = properties.getProperty(name);
-        if (value != null && ! "".equals(value)) {
+        if (value != null && !"".equals(value)) {
             Logger.logMessage(name + " = \"" + (doNotLog ? "{not logged}" : value) + "\"");
         } else {
             Logger.logMessage(name + " not defined");
@@ -291,7 +292,7 @@ public final class Kpl {
     }
 
     public static Transaction.Builder newTransactionBuilder(byte[] senderPublicKey, long amountNQT, long feeNQT, short deadline, Attachment attachment) {
-        return new TransactionImpl.BuilderImpl((byte)1, senderPublicKey, amountNQT, feeNQT, deadline, (Attachment.AbstractAttachment)attachment);
+        return new TransactionImpl.BuilderImpl((byte) 1, senderPublicKey, amountNQT, feeNQT, deadline, (Attachment.AbstractAttachment) attachment);
     }
 
     public static Transaction.Builder newTransactionBuilder(byte[] transactionBytes) throws KplException.NotValidException {
@@ -424,7 +425,8 @@ public final class Kpl {
                 }
                 try {
                     secureRandomInitThread.join(10000);
-                } catch (InterruptedException ignore) {}
+                } catch (InterruptedException ignore) {
+                }
                 testSecureRandom();
                 long currentTime = System.currentTimeMillis();
                 Logger.logMessage("Initialization took " + (currentTime - startTime) / 1000 + " seconds");
@@ -461,22 +463,22 @@ public final class Kpl {
     }
 
     private static void setSystemProperties() {
-      // Override system settings that the user has define in kpl.properties file.
-      String[] systemProperties = new String[] {
-        "socksProxyHost",
-        "socksProxyPort",
-      };
+        // Override system settings that the user has define in kpl.properties file.
+        String[] systemProperties = new String[]{
+                "socksProxyHost",
+                "socksProxyPort",
+        };
 
-      for (String propertyName : systemProperties) {
-        String propertyValue;
-        if ((propertyValue = getStringProperty(propertyName)) != null) {
-          System.setProperty(propertyName, propertyValue);
+        for (String propertyName : systemProperties) {
+            String propertyValue;
+            if ((propertyValue = getStringProperty(propertyName)) != null) {
+                System.setProperty(propertyName, propertyValue);
+            }
         }
-      }
     }
 
     private static void logSystemProperties() {
-        String[] loggedProperties = new String[] {
+        String[] loggedProperties = new String[]{
                 "java.version",
                 "java.vm.version",
                 "java.vm.name",

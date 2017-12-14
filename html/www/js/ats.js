@@ -1,12 +1,12 @@
 /******************************************************************************
- * Copyright © 2013-2016 The Nxt Core Developers.                             *
+ * Copyright © 2013-2016 The Kpl Core Developers.                             *
  * Copyright © 2016-2017 Jelurida IP B.V.                                     *
  *                                                                            *
  * See the LICENSE.txt file at the top-level directory of this distribution   *
  * for licensing information.                                                 *
  *                                                                            *
  * Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,*
- * no part of the Nxt software, including this file, may be copied, modified, *
+ * no part of the Kpl software, including this file, may be copied, modified, *
  * propagated, or distributed except according to the terms contained in the  *
  * LICENSE.txt file.                                                          *
  *                                                                            *
@@ -216,10 +216,10 @@ var ATS = (function(ATS, $, undefined) {
             hljs.highlightBlock(code_elem);
         })
         .error(function() {
-            alert('API not available, check if Nxt Server is running!');
+            alert('API not available, check if Kpl Server is running!');
         });
         if ($(form).has('.uri-link').length > 0) { 
-            var uri = '/nxt?' + jQuery.param(params, true);
+            var uri = '/kpl?' + jQuery.param(params, true);
             form.getElementsByClassName("uri-link")[0].innerHTML = '<a href="' + uri + '" target="_blank" style="font-size:12px;font-weight:normal;">Open GET URL</a>';
         }
         return false;

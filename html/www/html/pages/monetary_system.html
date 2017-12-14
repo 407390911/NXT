@@ -1,12 +1,12 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright © 2013-2016 The Nxt Core Developers.                            ~
+  ~ Copyright © 2013-2016 The Kpl Core Developers.                            ~
   ~ Copyright © 2016-2017 Jelurida IP B.V.                                    ~
   ~                                                                           ~
   ~ See the LICENSE.txt file at the top-level directory of this distribution  ~
   ~ for licensing information.                                                ~
   ~                                                                           ~
   ~ Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,
-  ~ no part of the Nxt software, including this file, may be copied, modified,~
+  ~ no part of the Kpl software, including this file, may be copied, modified,~
   ~ propagated, or distributed except according to the terms contained in the ~
   ~ LICENSE.txt file.                                                         ~
   ~                                                                           ~
@@ -18,7 +18,7 @@
     <section class="content-header">
         <h1 data-i18n="currencies">Currencies</h1>
         <div style="position:absolute;top:9px;left:190px;">
-            <form class="sidebar-form" id="currencies_search" style="width:200px;margin:0;display:inline-block;vertical-align:middle;" autocomplete="off">
+            <form class="sidebar-form" id="currencies_search" style="width:200px;margin:8px 0 0 0;display:inline-block;vertical-align:middle;" autocomplete="off">
                 <div class="input-group">
                     <input type="text" name="searchquery" class="form-control" placeholder="Search Currencies..." data-i18n="[placeholder]search_currency">
                     <span class="input-group-btn">
@@ -27,7 +27,7 @@
                 </div>
             </form>             
         </div>
-        <div style="position:absolute;top:9px;right:9px;">
+        <div style="position:absolute;top:50%;margin-top-16px;right:20px;">
             <div class="btn-group" data-toggle="buttons" id="currencies_page_type">
                 <label class="btn btn-default active" data-type="all">
                     <input type="radio" name="currencies_page_type"> <span data-i18n="all_currencies">All Currencies</span>
@@ -99,14 +99,14 @@
             <div class="col-md-6">
                 <div class="box box-solid box-info collapsed-box" id="buy_currency_box">
                     <div class="box-header" style="background-color:#DFF0D9;color: #48AB6C;">
-                    <h3 class="box-title" id="buy_currency_with_nxt"></h3>
+                    <h3 class="box-title" id="buy_currency_with_kpl"></h3>
                        <div class="box-tools pull-right">
                         <button class="btn btn-info btn-sm" style="background-color: #48AB6C"><i class="fa fa-plus"></i></button>
                         </div>
                     </div>
                     <div class="box-body no-padding" style="display:none">
                         <div style="background-color:#DFF0D9;color: #666;padding-left:10px;padding-right: 10px;padding-top: 0;padding-bottom:3px;"><strong data-i18n="balance">Balance</strong>:
-                            <span id="ms_your_nxt_balance"></span> NXT
+                            <span id="ms_your_kpl_balance"></span> KPL
                         </div>
                 
                         <form role="form" class="form-horizontal" style="padding: 10px;;max-width:350px;margin-left:auto;margin-right:auto;" autocomplete="off">
@@ -125,7 +125,7 @@
                                     <div class="col-sm-9">
                                         <div class="input-group">
                                             <input id="buy_currency_rate" type="text" value="0" name="buy_currency_rate" class="form-control" data-type="buy" readonly/>
-                                            <span class="input-group-addon"><span class="currency_code"></span> / NXT</span>
+                                            <span class="input-group-addon"><span class="currency_code"></span> / KPL</span>
                                         </div>
                                     </div>
                                 </div>
@@ -134,7 +134,7 @@
                                     <div class="col-sm-9">
                                         <div class="input-group">
                                             <input id="buy_currency_effective_rate" type="text" value="0" name="buy_currency_effective_rate" class="form-control" data-type="buy" readonly/>
-                                            <span class="input-group-addon"><span class="currency_code"></span> / NXT</span>
+                                            <span class="input-group-addon"><span class="currency_code"></span> / KPL</span>
                                         </div>
                                     </div>
                                 </div>
@@ -143,14 +143,14 @@
                                     <div class="col-sm-9">
                                         <div class="input-group">
                                             <input type="text" name="buy_currency_total" id="buy_currency_total" readonly value="0" class="form-control disabled" />
-                                            <span class="input-group-addon">NXT</span>
+                                            <span class="input-group-addon">KPL</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group form-group-last">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-9">
-                                        <button type="button" disabled class="btn btn-primary btn-lg btn-block" id="buy_currency_button" data-toggle="modal" data-target="#currency_order_modal" data-currency="" data-decimals="" data-type="buy"><span data-i18n="buy">Exchange</span> (NXT → <span class="currency_code"></span>)</button>
+                                        <button type="button" disabled class="btn btn-primary btn-lg btn-block" id="buy_currency_button" data-toggle="modal" data-target="#currency_order_modal" data-currency="" data-decimals="" data-type="buy"><span data-i18n="buy">Exchange</span> (KPL → <span class="currency_code"></span>)</button>
                                     </div>
                                 </div>
                             </div>
@@ -184,7 +184,7 @@
             <div class="col-md-6">
                 <div class="box box-solid box-info collapsed-box" id="sell_currency_box">
                     <div class="box-header" style="background:#F2DEDE;color:#ED4348;">
-                    <h3 class="box-title" id="sell_currency_with_nxt"></h3>
+                    <h3 class="box-title" id="sell_currency_with_kpl"></h3>
                        <div class="box-tools pull-right">
                         <button class="btn btn-info btn-sm" style="background-color: #ED4348"><i class="fa fa-plus"></i></button>
                         </div>
@@ -210,7 +210,7 @@
                                     <div class="col-sm-9">
                                         <div class="input-group">
                                             <input id="sell_currency_rate" type="text" value="0" name="sell_currency_rate" class="form-control" data-type="sell" readonly/>
-                                            <span class="input-group-addon"><span class="currency_code"></span> / NXT</span>
+                                            <span class="input-group-addon"><span class="currency_code"></span> / KPL</span>
                                         </div>
                                     </div>
                                 </div>
@@ -219,7 +219,7 @@
                                     <div class="col-sm-9">
                                         <div class="input-group">
                                             <input id="sell_currency_effective_rate" type="text" value="0" name="sell_currency_rate" class="form-control" data-type="sell" readonly/>
-                                            <span class="input-group-addon"><span class="currency_code"></span> / NXT</span>
+                                            <span class="input-group-addon"><span class="currency_code"></span> / KPL</span>
                                         </div>
                                     </div>
                                 </div>
@@ -228,14 +228,14 @@
                                     <div class="col-sm-9">
                                         <div class="input-group">
                                             <input type="text" name="sell_currency_total" id="sell_currency_total" readonly value="0" class="form-control disabled" />
-                                            <span class="input-group-addon">NXT</span>
+                                            <span class="input-group-addon">KPL</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group form-group-last">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-9">
-                                        <button type="button" disabled class="btn btn-primary btn-lg btn-block" id="sell_currency_button" data-toggle="modal" data-target="#currency_order_modal" data-currency="" data-decimals="" data-type="sell"><span data-i18n="sell">Exchange</span> (<span class="currency_code"></span> → NXT)</button>
+                                        <button type="button" disabled class="btn btn-primary btn-lg btn-block" id="sell_currency_button" data-toggle="modal" data-target="#currency_order_modal" data-currency="" data-decimals="" data-type="sell"><span data-i18n="sell">Exchange</span> (<span class="currency_code"></span> → KPL)</button>
                                     </div>
                                 </div>
                             </div>
@@ -354,7 +354,7 @@
                     <th data-i18n="buyer">Buyer</th>
                     <th data-i18n="units" class='numeric'>Units</th>
                     <th data-i18n="rate" class='numeric'>Rate</th>
-                    <th data-i18n="amount" class='numeric'>Amount [NXT]</th>
+                    <th data-i18n="amount" class='numeric'>Amount [KPL]</th>
                 </tr>
                 </thead>
                 <tbody>

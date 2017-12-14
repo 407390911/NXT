@@ -1,12 +1,12 @@
 /******************************************************************************
- * Copyright © 2013-2016 The Nxt Core Developers.                             *
+ * Copyright © 2013-2016 The Kpl Core Developers.                             *
  * Copyright © 2016-2017 Jelurida IP B.V.                                     *
  *                                                                            *
  * See the LICENSE.txt file at the top-level directory of this distribution   *
  * for licensing information.                                                 *
  *                                                                            *
  * Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,*
- * no part of the Nxt software, including this file, may be copied, modified, *
+ * no part of the Kpl software, including this file, may be copied, modified, *
  * propagated, or distributed except according to the terms contained in the  *
  * LICENSE.txt file.                                                          *
  *                                                                            *
@@ -33,7 +33,7 @@ RemoteNode.prototype.isBlacklisted = function () {
 
 RemoteNode.prototype.blacklist = function () {
     var blacklistedUntil = new Date().getTime() + 10 * 60 * 1000;
-    NRS.logConsole("Blacklist " + this.address + " until " + new Date(blacklistedUntil).format("isoDateTime"));
+    KRS.logConsole("Blacklist " + this.address + " until " + new Date(blacklistedUntil).format("isoDateTime"));
     this.blacklistedUntil = blacklistedUntil;
 };
 
@@ -65,7 +65,7 @@ function isOldVersion(version) {
 
 function isRemoteNodeConnectable(nodeData, isSslAllowed) {
     if (nodeData.services instanceof Array && (nodeData.services.indexOf("API") >= 0 || (isSslAllowed && nodeData.services.indexOf("API_SSL") >= 0))) {
-        if (!NRS.isRequireCors() || nodeData.services.indexOf("CORS") >= 0) {
+        if (!KRS.isRequireCors() || nodeData.services.indexOf("CORS") >= 0) {
             return !isOldVersion(nodeData.version);
         }
     }
@@ -82,45 +82,45 @@ RemoteNodesManager.prototype.addRemoteNodes = function (peersData) {
                 newNode.blacklistedUntil = oldNode.blacklistedUntil;
             }
             mgr.nodes[peerData.address] = newNode;
-            NRS.logConsole("Found remote node " + peerData.address + " blacklisted " + newNode.isBlacklisted());
+            KRS.logConsole("Found remote node " + peerData.address + " blacklisted " + newNode.isBlacklisted());
         }
     });
 };
 
 RemoteNodesManager.prototype.addBootstrapNode = function (resolve, reject) {
     var node = new RemoteNode({
-        address: NRS.mobileSettings.remote_node_address,
-        announcedAddress: NRS.mobileSettings.remote_node_address,
-        apiPort: NRS.mobileSettings.remote_node_port,
-        isSsl: NRS.mobileSettings.is_remote_node_ssl
+        address: KRS.mobileSettings.remote_node_address,
+        announcedAddress: KRS.mobileSettings.remote_node_address,
+        apiPort: KRS.mobileSettings.remote_node_port,
+        isSsl: KRS.mobileSettings.is_remote_node_ssl
     });
     var mgr = this;
-    NRS.logConsole("Connecting to configured address " + node.address + " on port " + node.port + " using ssl " + node.isSsl);
-    NRS.sendRequest("getBlockchainStatus", { "_extra": node }, function(response, data) {
+    KRS.logConsole("Connecting to configured address " + node.address + " on port " + node.port + " using ssl " + node.isSsl);
+    KRS.sendRequest("getBlockchainStatus", { "_extra": node }, function(response, data) {
         if (response.blockchainState && response.blockchainState != "UP_TO_DATE" || response.isDownloading) {
-            NRS.logConsole("Warning: Bootstrap node blockchain state is " + response.blockchainState);
+            KRS.logConsole("Warning: Bootstrap node blockchain state is " + response.blockchainState);
         }
         if (response.errorCode || !isRemoteNodeConnectable(response, true)) {
             if (response.errorCode) {
-                NRS.logConsole("Bootstrap node cannot be used " + response.errorDescription);
+                KRS.logConsole("Bootstrap node cannot be used " + response.errorDescription);
             } else {
-                NRS.logConsole("Bootstrap node does not provide the required services");
+                KRS.logConsole("Bootstrap node does not provide the required services");
             }
             $.growl("Cannot connect to configured node, connecting to a random node");
             mgr.addBootstrapNodes(resolve, reject);
             return;
         }
         var node = data["_extra"];
-        NRS.logConsole("Adding bootstrap node " + node.address);
+        KRS.logConsole("Adding bootstrap node " + node.address);
         mgr.nodes[node.address] = node;
         resolve();
     }, { noProxy: true, remoteNode: node });
 };
 
 RemoteNodesManager.prototype.addBootstrapNodes = function (resolve, reject) {
-    NRS.logConsole("addBootstrapNodes: client protocol is '" + window.location.protocol + "'");
-    if (!NRS.isRemoteNodeConnectionAllowed()) {
-        NRS.logConsole($.t("https_client_cannot_connect_remote_nodes"));
+    KRS.logConsole("addBootstrapNodes: client protocol is '" + window.location.protocol + "'");
+    if (!KRS.isRemoteNodeConnectionAllowed()) {
+        KRS.logConsole($.t("https_client_cannot_connect_remote_nodes"));
         $.growl($.t("https_client_cannot_connect_remote_nodes"));
         var mobileSettingsModal = $("#mobile_settings_modal");
         mobileSettingsModal.find("input[name=is_offline]").val("true");
@@ -128,9 +128,9 @@ RemoteNodesManager.prototype.addBootstrapNodes = function (resolve, reject) {
         return false;
     }
     var peersData = this.REMOTE_NODES_BOOTSTRAP.peers;
-    peersData = NRS.getRandomPermutation(peersData);
+    peersData = KRS.getRandomPermutation(peersData);
     var mgr = this;
-    mgr.bc.target = NRS.mobileSettings.is_testnet ? 2 : NRS.mobileSettings.bootstrap_nodes_count;
+    mgr.bc.target = KRS.mobileSettings.is_testnet ? 2 : KRS.mobileSettings.bootstrap_nodes_count;
     mgr.bc.limit = Math.min(peersData.length, 3*mgr.bc.target);
     var data = {state: "CONNECTED", includePeerInfo: true};
 
@@ -142,7 +142,7 @@ RemoteNodesManager.prototype.addBootstrapNodes = function (resolve, reject) {
     for (var i=0; i < mgr.bc.limit; i++) {
         var peerData = peersData[i];
         if (!isRemoteNodeConnectable(peerData, false)) {
-            NRS.logConsole("Reject: bootstrap node " + peerData.address + " required services not available" +
+            KRS.logConsole("Reject: bootstrap node " + peerData.address + " required services not available" +
                 (peerData.services ? ", node services " + peerData.services : ""));
             if (countRejections()) {
                 reject();
@@ -152,7 +152,7 @@ RemoteNodesManager.prototype.addBootstrapNodes = function (resolve, reject) {
         }
         var node = new RemoteNode(peerData);
         if (!node.port) {
-            NRS.logConsole("Reject: bootstrap node " + node.address + ", api port undefined");
+            KRS.logConsole("Reject: bootstrap node " + node.address + ", api port undefined");
             if (countRejections()) {
                 reject();
             }
@@ -160,17 +160,17 @@ RemoteNodesManager.prototype.addBootstrapNodes = function (resolve, reject) {
             continue;
         }
         data["_extra"] = node;
-        NRS.logConsole("Connecting to bootstrap node " + node.address + " port " + node.port);
-        NRS.sendRequest("getBlockchainStatus", data, function(response, data) {
+        KRS.logConsole("Connecting to bootstrap node " + node.address + " port " + node.port);
+        KRS.sendRequest("getBlockchainStatus", data, function(response, data) {
             mgr.bc.counter ++;
             if (mgr.bc.success >= mgr.bc.target) {
-                NRS.logConsole("Ignore: already have enough nodes, bootstrap node not added");
+                KRS.logConsole("Ignore: already have enough nodes, bootstrap node not added");
                 resolve();
                 return;
             }
             if (response.errorCode) {
                 // Here we don't know which node it was
-                NRS.logConsole("Reject: bootstrap node returned error " + response.errorDescription);
+                KRS.logConsole("Reject: bootstrap node returned error " + response.errorDescription);
                 if (countRejections()) {
                     reject();
                 }
@@ -178,27 +178,27 @@ RemoteNodesManager.prototype.addBootstrapNodes = function (resolve, reject) {
             }
             var responseNode = data["_extra"];
             if (response.blockchainState && response.blockchainState != "UP_TO_DATE" || response.isDownloading) {
-                NRS.logConsole("Reject: bootstrap node " + responseNode.address + " blockchain state is " + response.blockchainState);
+                KRS.logConsole("Reject: bootstrap node " + responseNode.address + " blockchain state is " + response.blockchainState);
                 if (countRejections()) {
                     reject();
                 }
                 return;
             }
             if (!isRemoteNodeConnectable(response, false)) {
-                NRS.logConsole("Reject: bootstrap node " + responseNode.address + " required service not available, node services " + responseNode.services);
+                KRS.logConsole("Reject: bootstrap node " + responseNode.address + " required service not available, node services " + responseNode.services);
                 if (countRejections()) {
                     reject();
                 }
                 return;
             }
-            NRS.logConsole("Accept: adding bootstrap node " + responseNode.address + " response time " + (new Date() - responseNode.connectionTime) + " ms");
+            KRS.logConsole("Accept: adding bootstrap node " + responseNode.address + " response time " + (new Date() - responseNode.connectionTime) + " ms");
             mgr.nodes[responseNode.address] = responseNode;
             mgr.bc.success ++;
             if (mgr.bc.success == mgr.bc.target) {
-                NRS.logConsole("Resolve: found " + mgr.bc.target + " nodes, start client");
+                KRS.logConsole("Resolve: found " + mgr.bc.target + " nodes, start client");
                 resolve();
             } else if (mgr.bc.counter == mgr.bc.limit) {
-                NRS.logConsole("Connection failed, connected only to " + mgr.bc.success + " nodes in " + mgr.bc.counter + " attempts. Target is " + mgr.bc.target);
+                KRS.logConsole("Connection failed, connected only to " + mgr.bc.success + " nodes in " + mgr.bc.counter + " attempts. Target is " + mgr.bc.target);
                 reject();
             }
         }, { noProxy: true, remoteNode: node });
@@ -208,7 +208,7 @@ RemoteNodesManager.prototype.addBootstrapNodes = function (resolve, reject) {
 RemoteNodesManager.prototype.getRandomNode = function (ignoredAddresses) {
     var addresses = Object.keys(this.nodes);
     if (addresses.length == 0) {
-        NRS.logConsole("Cannot get random node. No nodes available");
+        KRS.logConsole("Cannot get random node. No nodes available");
         return null;
     }
     var index = Math.floor((Math.random() * addresses.length));
@@ -254,7 +254,7 @@ RemoteNodesManager.prototype.findMoreNodes = function (isReschedule) {
         return;
     }
     var data = {state: "CONNECTED", includePeerInfo: true};
-    NRS.sendRequest("getPeers", data, function (response) {
+    KRS.sendRequest("getPeers", data, function (response) {
         if (response.peers) {
             nodesMgr.addRemoteNodes(response.peers);
         }
@@ -267,7 +267,7 @@ RemoteNodesManager.prototype.findMoreNodes = function (isReschedule) {
 };
 
 RemoteNodesManager.prototype.init = function () {
-    if (NRS.isMobileApp()) {
+    if (KRS.isMobileApp()) {
         //load the remote nodes bootstrap file only for mobile wallet
         jQuery.ajaxSetup({ async: false });
         $.getScript(this.isTestnet ? "js/data/remotenodesbootstrap.testnet.js" : "js/data/remotenodesbootstrap.mainnet.js");
